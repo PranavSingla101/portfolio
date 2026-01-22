@@ -31,7 +31,7 @@ export default function Intro() {
             }}
           >
             <Image
-              src="/pranav-profile.jfif"
+              src="/pranav-profile.jpg"
               alt="Pranav portrait"
               width="192"
               height="192"
