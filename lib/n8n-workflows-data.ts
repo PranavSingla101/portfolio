@@ -50,9 +50,9 @@ export const n8nWorkflowsData = [
       title: "LinkedIn Outreach",
       description: "Designed and deployed an end-to-end automated prospecting workflow that integrates HubSpot CRM with AI-powered content generation to streamline LinkedIn outreach. The system manages the entire lifecycle: from identifying new leads and sending personalized invites to syncing acceptance data back to the CRM, significantly reducing manual effort while increasing engagement rates.",
       features: [
-         "AI-Driven Pipeline: Uses n8n and Google Gemini to generate hyper-personalized connection messages based on HubSpot data in real-time",
+         "AI-Driven Pipeline: Uses Gemini 2.5 pro API to generate hyper-personalized connection messages based on HubSpot data in real-time",
          "Multi-Platform Orchestration: Connects HubSpot, Phantombuster, Google Sheets, and Slack to automate lead extraction and campaign execution",
-         "Closed-Loop Synchronization: Automatically tracks connection acceptance rates, updates lead statuses, and notifies sales teams via Slack upon conversion",
+         "Synchronization: Automatically tracks connection acceptance rates, updates lead statuses, and notifies sales teams via Slack",
       ],
       tags: ["n8n", "HubSpot", "Phantombuster", "Gemini", "Slack", "Google Sheets"],
       icons: [
