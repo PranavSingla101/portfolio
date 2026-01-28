@@ -59,7 +59,13 @@ export default function Header() {
 
                 {link.name === activeSection && (
                   <motion.span
-                    className="bg-gray-100 rounded-full absolute inset-0 -z-10 dark:bg-gray-800"
+                    className={clsx(
+                      "bg-gray-100 rounded-full absolute -z-10 dark:bg-gray-800",
+                      {
+                        "inset-0": link.name !== "Home",
+                        "-inset-x-2 inset-y-0": link.name === "Home",
+                      }
+                    )}
                     layoutId="activeSection"
                     transition={{
                       type: "spring",
@@ -86,19 +92,19 @@ export default function Header() {
                 {/* Sun icon on left */}
                 <BsSun className={clsx(
                   "text-xs sm:text-sm transition-all",
-                  theme === "light" 
-                    ? "text-gray-950 opacity-70" 
+                  theme === "light"
+                    ? "text-gray-950 opacity-70"
                     : "text-gray-500 opacity-30 dark:text-gray-400"
                 )} />
                 {/* Moon icon on right */}
                 <BsMoon className={clsx(
                   "text-xs sm:text-sm transition-all",
-                  theme === "dark" 
-                    ? "text-white opacity-90" 
+                  theme === "dark"
+                    ? "text-white opacity-90"
                     : "text-gray-500 opacity-30 dark:text-gray-400"
                 )} />
               </div>
-              
+
               {/* Sliding handle */}
               <motion.div
                 className="absolute top-0.5 left-0.5 w-[1.25rem] h-[1.25rem] sm:w-[1.5rem] sm:h-[1.5rem] rounded-full bg-gray-950 dark:bg-white shadow-md flex items-center justify-center z-10"

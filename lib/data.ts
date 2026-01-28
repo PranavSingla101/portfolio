@@ -9,6 +9,7 @@ import awareSS from "@/public/Aware Updated ss.png";
 import awarePic2 from "@/public/Aware pic2.png";
 import ragChatPDF from "@/public/chatwithyourpdfrag.jpg";
 import ragProcess from "@/public/RAG process.jpg";
+import n8nWorkflowCover from "@/public/N8N workflow cover.png";
 
 export const links = [
   {
@@ -78,6 +79,25 @@ export const experiencesData = [
 
 export const projectsData = [
   {
+    title: "N8N Workflows",
+    description: "Production-grade automation workflows built with n8n. Fully automated end-to-end pipelines.",
+    features: [
+      "Advanced LLM integration for conversational voice bots and autonomous content engines",
+      "Cross-platform scraping and data enrichment pipelines (LinkedIn, X, Apollo)",
+      "Production-ready state management connecting CRM webhooks with real-time outreach",
+    ],
+    tags: ["n8n", "Automation", "LLM", "API Integration", "Webhooks", "CRM"],
+    icons: [
+      { name: "n8n", icon: "simple-icons:n8n" },
+      { name: "Automation", icon: "material-symbols:auto-awesome" },
+      { name: "API", icon: "material-symbols:api" },
+      { name: "Webhooks", icon: "material-symbols:webhook" },
+      { name: "Database", icon: "material-symbols:database" },
+    ],
+    imageUrl: n8nWorkflowCover,
+    images: [n8nWorkflowCover],
+  },
+  {
     title: "RAG-Powered Document Assistant",
     description: "Intelligent document Q&A system using Retrieval-Augmented Generation to enable natural language queries over PDF documents with semantic search and context-aware responses.",
     features: [
@@ -95,6 +115,7 @@ export const projectsData = [
     ],
     imageUrl: ragChatPDF,
     images: [ragChatPDF, ragProcess],
+    githubLink: "https://github.com/PranavSingla101/pdf_rag_chatbot",
   },
   {
     title: "Project AWARE",
