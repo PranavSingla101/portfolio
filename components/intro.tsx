@@ -63,7 +63,7 @@ export default function Intro() {
         animate={{ opacity: 1, y: 0 }}
       >
         <span className="font-bold">Hello, I'm Pranav.</span> I'm a{" "}
-        <span className="font-bold bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">Full Stack AI Agent Developer</span>{" "}
+        <span className="font-bold bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">Agentic AI and Workflow Automation Developer</span>{" "}
         building intelligent applications and complex workflows.
       </motion.h1>
 
