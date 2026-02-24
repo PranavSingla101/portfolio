@@ -1,7 +1,6 @@
 import Header from "@/components/header";
 import { Nunito } from "next/font/google";
 import ActiveSectionContextProvider from "@/context/active-section-context";
-import ThemeSwitch from "@/components/theme-switch";
 import ThemeContextProvider from "@/context/theme-context";
 import { Toaster } from "react-hot-toast";
 import "./globals.css";
@@ -19,9 +18,9 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className="!scroll-smooth">
+    <html lang="en" className="!scroll-smooth dark" suppressHydrationWarning>
       <body
-        className={`${nunito.className} bg-gray-50 text-gray-950 relative dark:bg-gray-900 dark:text-gray-50 dark:text-opacity-90`}
+        className={`${nunito.className} bg-gray-900 text-gray-50 text-opacity-90 relative`}
       >
         <ThemeContextProvider>
           <ActiveSectionContextProvider>
@@ -29,7 +28,6 @@ export default function RootLayout({
             {children}
 
             <Toaster position="top-right" />
-            <ThemeSwitch />
           </ActiveSectionContextProvider>
         </ThemeContextProvider>
       </body>

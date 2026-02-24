@@ -40,7 +40,7 @@ export const links = [
 
 export const experiencesData = [
   {
-    title: "Freelance Workflow Automation Developer",
+    title: "AI Workflow Automation Developer",
     location: "",
     description: [
       "Designed and deployed production-grade n8n automation workflows to fully automate lead sourcing, qualification, outreach, and CRM synchronization",
@@ -98,7 +98,7 @@ export const projectsData = [
     images: [n8nWorkflowCover],
   },
   {
-    title: "RAG-Powered Document Assistant",
+    title: "RAG PDF Assistant",
     description: "Intelligent document Q&A system using Retrieval-Augmented Generation to enable natural language queries over PDF documents with semantic search and context-aware responses.",
     features: [
       "LangChain-powered RAG pipeline with ChromaDB vector store for semantic document retrieval",

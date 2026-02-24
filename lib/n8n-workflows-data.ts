@@ -4,9 +4,14 @@ import linkedinOutreachImg from "@/public/LINKEDIN OUTREACH IMAGE.png";
 import phantombusterLogo from "@/public/Phantombuster_LOGO.png";
 import duckduckgoLogo from "@/public/Duckduckgologo.png";
 
+import voiceAgentImg from "@/public/Voice-Agent-Productivity Assistant.png";
+import vapiSSImg from "@/public/VAPI SS.png";
+import mcpSSImg from "@/public/MCP SS.png";
+import n8nWorkflowCover from "@/public/N8N workflow cover.png";
+
 export const n8nWorkflowsData = [
    {
-      title: "Cold Email Outreach",
+      title: "Cold Email Outreach Engine",
       description: "This project automates intelligent email outreach by retrieving Lead data from HubSpot and using Gemini to generate hyper-personalized, industry-specific messages, before pushing campaigns to Smartlead for execution.",
       features: [
          "Lead Qualification: Automatically pulls high-intent leads from HubSpot",
@@ -24,6 +29,45 @@ export const n8nWorkflowsData = [
       ],
       imageUrl: automatedEmailOutreachImg,
       images: [automatedEmailOutreachImg],
+   },
+   {
+      title: "AI Website Scraper & Icebreaker",
+      description: "Built an AI workflow that writes personalized icebreakers using real company data, not templates. It crawls key pages, extracts meaningful signals, and aggregates context to generate specific, relevant openers.",
+      features: [
+         "Company Research: Crawl key pages (home, about, product, blog) and extract meaningful signals",
+         "AI Summarization: Convert pages into usable insights (product, growth, hiring, messaging)",
+         "Context Aggregation: Combine everything into a clean company profile, focusing only on what’s relevant",
+         "Icebreaker Generation: Generate multi-line personalized openers based on actual insights",
+      ],
+      tags: ["n8n", "Apollo", "Firecrawl", "Gemini 2.5 Pro", "Sheets", "Gmail"],
+      icons: [
+         { name: "n8n", icon: "simple-icons:n8n" },
+         { name: "Apollo", icon: "material-symbols:rocket-launch" },
+         { name: "Firecrawl", icon: "material-symbols:local-fire-department" },
+         { name: "Gemini (2.5 Pro)", icon: "logos:google-gemini" },
+         { name: "Sheets", icon: "logos:google-sheets" },
+         { name: "Gmail", icon: "logos:google-gmail" },
+      ],
+      imageUrl: n8nWorkflowCover,
+      images: [n8nWorkflowCover],
+   },
+   {
+      title: "Voice Agent Assistant",
+      description: "A voice assistant that eliminates manual tasks. This workflow manages calendars, creates tasks, and retrieves information, responding instantly with minimal latency.",
+      features: [
+         "Real-time Voice AI: Leverages Vapi for natural, conversational interactions",
+         "Contextual Action: Intelligently parses intent to trigger n8n workflows via MCP depending on tasks",
+         "Personal Knowledge Base: Connects to Google Calendar to read/write data seamlessly",
+      ],
+      tags: ["n8n", "Vapi", "OpenAI", "Google Calendar"],
+      icons: [
+         { name: "n8n", icon: "simple-icons:n8n" },
+         { name: "Vapi", icon: "mdi:microphone" },
+         { name: "OpenAI", icon: "simple-icons:openai" },
+         { name: "Calendar", icon: "logos:google-calendar" },
+      ],
+      imageUrl: mcpSSImg,
+      images: [mcpSSImg, voiceAgentImg, vapiSSImg],
    },
    {
       title: "X Content Engine",
@@ -52,7 +96,7 @@ export const n8nWorkflowsData = [
       features: [
          "AI-Driven Pipeline: Uses Gemini 2.5 pro API to generate hyper-personalized connection messages based on HubSpot data in real-time",
          "Multi-Platform Orchestration: Connects HubSpot, Phantombuster, Google Sheets, and Slack to automate lead extraction and campaign execution",
-         "Synchronization: Automatically tracks connection acceptance rates, updates lead statuses, and notifies sales teams via Slack",
+         "Sync: Automatically tracks connection acceptance rates, updates lead statuses, and notifies sales teams via Slack",
       ],
       tags: ["n8n", "HubSpot", "Phantombuster", "Gemini", "Slack", "Google Sheets"],
       icons: [

@@ -2,10 +2,10 @@
 
 import { useRef, useState } from "react";
 import Image, { StaticImageData } from "next/image";
-import { motion, useScroll, useTransform, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { BiLinkExternal } from "react-icons/bi";
 import { AiFillGithub, AiFillYoutube } from "react-icons/ai";
-import { BsChevronLeft, BsChevronRight } from "react-icons/bs";
+import { BsChevronLeft, BsChevronRight, BsArrowRight } from "react-icons/bs";
 import { IoMdClose } from "react-icons/io";
 import { Icon } from "@iconify/react";
 import Link from "next/link";
@@ -38,7 +38,6 @@ export default function Project({
 }: ProjectProps) {
   const ref = useRef<HTMLDivElement>(null);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
-  const [isHovered, setIsHovered] = useState(false);
   const [lightboxOpen, setLightboxOpen] = useState(false);
   const { setActiveSection, setTimeOfLastClick } = useActiveSectionContext();
 
@@ -56,88 +55,168 @@ export default function Project({
   };
 
   const cardContent = (
-    <section className={`bg-gray-100 max-w-[58rem] border border-black/5 rounded-lg overflow-visible sm:pr-8 relative lg:min-h-[21rem] hover:bg-gray-200 transition dark:text-white dark:bg-white/10 dark:hover:bg-white/20 ${isN8NWorkflows ? 'cursor-pointer' : ''}`}>
-      <div className="pt-4 pb-7 px-5 md:pl-10 md:pr-2 md:pt-10 lg:max-w-[45%] flex flex-col h-full relative z-10">
-        <h3 className="text-2xl font-semibold mb-4">{title}</h3>
-        <div className="flex flex-nowrap items-center gap-x-2 gap-y-1.5 mb-3 sm:mt-auto">
-          <span className="font-bold text-gray-500 dark:text-white/70 whitespace-nowrap flex-shrink-0">
-            Made with:{" "}
-          </span>
-          {icons.map((tech, iconIndex) => {
-            const techName = typeof tech === 'string' ? '' : tech.name;
-            const iconData = typeof tech === 'string' ? tech : tech.icon;
+    <div className="group flex flex-col lg:flex-row gap-0 w-full rounded-3xl overflow-hidden border border-slate-600/40 bg-gradient-to-b from-slate-900 to-slate-950 shadow-[0_25px_50px_-12px_rgba(0,0,0,0.5),0_0_0_1px_rgba(255,255,255,0.04)_inset] transition-all duration-300 hover:shadow-[0_30px_60px_-15px_rgba(0,0,0,0.55),0_0_0_1px_rgba(255,255,255,0.06)_inset] hover:border-slate-500/50">
+      {/* ── Image Side (Left) — mobile: same aspect as N8N card, no thumbnail strip; desktop unchanged ── */}
+      <div
+        className="relative w-full lg:w-[58%] overflow-hidden cursor-zoom-in bg-slate-950 flex items-center justify-center min-h-0 aspect-[16/10] sm:aspect-[4/3] lg:aspect-auto lg:min-h-[32rem] p-2 sm:p-4 lg:p-4"
+        onClick={() => setLightboxOpen(true)}
+      >
+        {/* Main image — contain so nothing gets cropped; mobile-optimized aspect + padding */}
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={currentImageIndex}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.25, ease: "easeInOut" }}
+            className="absolute inset-2 sm:inset-4 z-[1] flex items-center justify-center rounded-xl ring-1 ring-slate-600/40 shadow-inner bg-slate-900/80 overflow-hidden"
+          >
+            <Image
+              src={displayImages[currentImageIndex]}
+              alt="Project screenshot"
+              quality={100}
+              fill
+              className="object-contain"
+              sizes="(max-width: 640px) 100vw, (max-width: 1024px) 90vw, 55vw"
+            />
+          </motion.div>
+        </AnimatePresence>
 
-            if (typeof iconData === 'object' && 'src' in iconData) {
+        {/* Navigation arrows — desktop only on mobile show in lightbox */}
+        {displayImages.length > 1 && (
+          <>
+            <button
+              onClick={prevImage}
+              className="absolute left-3 top-1/2 -translate-y-1/2 bg-black/40 backdrop-blur-sm text-white rounded-full p-2.5 z-[4] opacity-0 group-hover:opacity-100 hover:bg-black/60 transition-all duration-200 border border-white/10 hidden lg:flex"
+            >
+              <BsChevronLeft className="text-base" />
+            </button>
+            <button
+              onClick={nextImage}
+              className="absolute right-3 top-1/2 -translate-y-1/2 bg-black/40 backdrop-blur-sm text-white rounded-full p-2.5 z-[4] opacity-0 group-hover:opacity-100 hover:bg-black/60 transition-all duration-200 border border-white/10 hidden lg:flex"
+            >
+              <BsChevronRight className="text-base" />
+            </button>
+
+            {/* Dot indicators — show on all breakpoints so mobile users see there are more images / can swipe in lightbox */}
+            <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-1.5 z-[4]">
+              {displayImages.map((_, idx) => (
+                <button
+                  key={idx}
+                  onClick={(e) => { e.stopPropagation(); setCurrentImageIndex(idx); }}
+                  className={`rounded-full transition-all duration-300 ${idx === currentImageIndex
+                    ? "w-5 h-2 bg-white shadow-md"
+                    : "w-2 h-2 bg-white/50 hover:bg-white/80"
+                    }`}
+                />
+              ))}
+            </div>
+          </>
+        )}
+
+        {/* Thumbnail strip — desktop only; not shown on mobile for N8N-like clean card */}
+        {displayImages.length > 1 && (
+          <div className="hidden lg:flex absolute bottom-2 left-2 right-2 gap-2 overflow-x-auto z-[4] pb-1">
+            {displayImages.map((img, index) => (
+              <div
+                key={index}
+                onClick={(e) => { e.stopPropagation(); setCurrentImageIndex(index); }}
+                className={`flex-shrink-0 rounded-md overflow-hidden border-2 cursor-pointer transition-all ${index === currentImageIndex
+                  ? "border-indigo-400/80 shadow-lg"
+                  : "border-slate-600/60 opacity-70 hover:opacity-100"
+                  }`}
+              >
+                <Image
+                  src={img}
+                  alt="Thumbnail"
+                  height={44}
+                  width={70}
+                  className="object-cover h-[44px] w-[70px]"
+                  quality={50}
+                />
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+
+      {/* ── Content Side (Right) ── */}
+      <div className="w-full lg:w-[42%] p-7 lg:p-10 flex flex-col justify-center border-t lg:border-t-0 lg:border-l border-slate-600/40">
+        {/* Title row */}
+        <div className="flex items-center gap-3 mb-5">
+          <h3 className="text-3xl lg:text-4xl font-bold text-white tracking-tight leading-tight">
+            {title}
+          </h3>
+          {githubLink && (
+            <a
+              href={githubLink}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="sm:hidden ml-auto flex items-center justify-center w-9 h-9 rounded-full border border-slate-500/50 text-slate-300 hover:text-white hover:border-slate-400 active:scale-95 transition"
+            >
+              <AiFillGithub className="text-xl" />
+            </a>
+          )}
+        </div>
+
+        {/* "Made with" tech icons */}
+        <div className="flex flex-wrap items-center gap-x-2 gap-y-2 mb-6">
+          <span className="text-base font-semibold text-slate-300 uppercase tracking-wider">
+            Made with
+          </span>
+          <div className="flex flex-wrap gap-2.5 items-center">
+            {icons.map((tech, iconIndex) => {
+              const techName = typeof tech === "string" ? "" : tech.name;
+              const iconData = typeof tech === "string" ? tech : tech.icon;
+
+              if (typeof iconData === "object" && "src" in iconData) {
+                return (
+                  <div key={iconIndex} className="relative w-8 h-8 flex-shrink-0" title={techName}>
+                    <Image src={iconData} alt={techName} fill className="object-contain" />
+                  </div>
+                );
+              }
+
+              const isFastAPI = techName === "FastAPI";
               return (
-                <div key={iconIndex} className="relative w-6 h-6 flex-shrink-0" title={techName}>
-                  <Image
-                    src={iconData}
-                    alt={techName}
-                    fill
-                    className="object-contain"
-                    sizes="24px"
+                <div key={iconIndex} title={techName} className="flex-shrink-0">
+                  <Icon
+                    icon={iconData as string}
+                    className={`${isFastAPI ? "text-[1.25rem]" : "text-[1.5rem]"} text-slate-300`}
                   />
                 </div>
-              )
-            }
-
-            const isFastAPI = techName === 'FastAPI';
-            return (
-              <Icon
-                key={iconIndex}
-                icon={iconData as string}
-                className={`${isFastAPI ? 'text-base' : 'text-lg'} flex-shrink-0 text-gray-700 dark:text-white/70`}
-              />
-            );
-          })}
+              );
+            })}
+          </div>
         </div>
 
-        {/* Mobile Thumbnail Strip */}
-        <div className="flex lg:hidden gap-2 overflow-x-auto pb-4 pt-1 scrollbar-hide">
-          {displayImages.map((img, index) => (
-            <div
-              key={index}
-              className="relative flex-shrink-0 cursor-pointer rounded-lg overflow-hidden border border-black/5 dark:border-white/5 transition-all hover:opacity-80 active:scale-95"
-              onClick={(e) => {
-                e.preventDefault();
-                e.stopPropagation();
-                setCurrentImageIndex(index);
-                setLightboxOpen(true);
-              }}
-            >
-              <Image
-                src={img}
-                alt="Project thumbnail"
-                quality={60}
-                className="h-[60px] w-auto object-cover"
-                height={60}
-                width={100}
-              />
-            </div>
-          ))}
-        </div>
-        <p className="mt-2 leading-relaxed text-gray-700 dark:text-white/70 mb-3">
+        {/* Description */}
+        <p className="leading-relaxed text-slate-200 mb-6 text-base sm:text-lg">
           {description}
         </p>
+
+        {/* Feature bullets */}
         {features && features.length > 0 && (
-          <ul className="mt-3 mb-3 space-y-1.5 text-gray-700 dark:text-white/70">
+          <ul className="mb-6 space-y-3" role="list">
             {features.map((feature, index) => (
-              <li key={index} className="flex items-start">
-                <span className="mr-2 text-gray-500 dark:text-white/50">•</span>
-                <span className="leading-relaxed">{feature}</span>
+              <li key={index} className="flex items-start gap-3 text-base sm:text-[1.0625rem] text-slate-200 leading-relaxed">
+                <span className="mt-1.5 flex-shrink-0 w-2 h-2 rounded-full bg-indigo-300 ring-2 ring-indigo-300/40" aria-hidden />
+                {feature}
               </li>
             ))}
           </ul>
         )}
-        <div className="flex mt-5">
+
+        {/* Action buttons */}
+        <div className="flex flex-wrap gap-3 mt-auto">
           {urlLink && (
             <a
               href={urlLink}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center bg-[#111827] text-white py-2 px-4 mr-2 rounded-full hover:scale-105"
+              className="flex items-center gap-1.5 bg-indigo-500 text-white py-2.5 px-5 rounded-xl text-base font-semibold hover:bg-indigo-400 transition active:scale-[0.98]"
             >
-              <BiLinkExternal className="mr-1" /> Live
+              <BiLinkExternal /> Live
             </a>
           )}
 
@@ -146,9 +225,9 @@ export default function Project({
               href={demoLink}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center bg-[#111827] text-white py-2 px-4 mr-2 rounded-full hover:scale-105"
+              className="flex items-center gap-1.5 bg-indigo-500 text-white py-2.5 px-5 rounded-xl text-base font-semibold hover:bg-indigo-400 transition active:scale-[0.98]"
             >
-              <AiFillYoutube className="mr-1" /> Demo
+              <AiFillYoutube /> Demo
             </a>
           )}
 
@@ -157,118 +236,35 @@ export default function Project({
               href={githubLink}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center border border-[#111827] py-2 px-4 rounded-full mr-2 text-[#111827] hover:scale-105 dark:border-white dark:text-white dark:border-opacity-40"
+              className="hidden sm:flex items-center gap-1.5 border border-slate-500/50 py-2.5 px-5 rounded-xl text-base font-semibold text-slate-200 hover:bg-slate-700/50 hover:border-slate-400 transition active:scale-[0.98]"
             >
-              <AiFillGithub className="mr-1 opacity-70" />{" "}
-              <span className="opacity-70">GitHub</span>
+              <AiFillGithub /> GitHub
             </a>
+          )}
+
+          {isN8NWorkflows && (
+            <span className="flex items-center gap-1.5 bg-indigo-500 text-white py-2.5 px-5 rounded-xl text-base font-semibold hover:bg-indigo-400 transition cursor-pointer active:scale-[0.98]">
+              View Workflows <BsArrowRight />
+            </span>
           )}
         </div>
       </div>
-
-      {isN8NWorkflows && (
-        <div className="absolute bottom-3 right-3 sm:bottom-5 sm:right-5 flex items-center gap-2 px-4 py-2 text-xs sm:text-sm font-medium text-gray-800 bg-white/80 dark:bg-gray-900/80 border border-gray-200 dark:border-gray-700/50 rounded-full shadow-sm backdrop-blur-[2px] transition-all group-hover:shadow-md group-hover:bg-white dark:group-hover:bg-gray-800 dark:text-gray-200">
-          <span>View Workflows</span>
-          <BsChevronRight className="text-xs sm:text-sm transition-transform group-hover:translate-x-1" />
-        </div>
-      )}
-
-      <div
-        className="absolute hidden lg:block top-[50%] -translate-y-[50%] right-0 translate-x-[15%] w-[35rem] max-h-[30rem] rounded-t-lg shadow-2xl group/image overflow-visible z-0"
-        onMouseEnter={() => setIsHovered(true)}
-        onMouseLeave={() => setIsHovered(false)}
-      >
-        <motion.div
-          className="w-full h-full rounded-t-lg overflow-hidden bg-white dark:bg-gray-800 border-2 border-gray-200 dark:border-gray-700"
-          initial={{ scale: 0.9, opacity: 0.8, y: 20 }}
-          whileInView={{ scale: 1, opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6, type: "spring", stiffness: 100 }}
-          whileHover={{ scale: 1.05, y: -5 }}
-        >
-          <AnimatePresence mode="wait">
-            <motion.div
-              key={currentImageIndex}
-              initial={{ opacity: 0, x: 10 }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: -10 }}
-              transition={{ duration: 0.15, ease: "easeInOut" }}
-              className="w-full h-full"
-            >
-              <Image
-                src={displayImages[currentImageIndex]}
-                alt="Project I worked on"
-                quality={95}
-                className="w-full h-full object-contain"
-              />
-            </motion.div>
-          </AnimatePresence>
-        </motion.div>
-
-        {displayImages.length > 1 && (
-          <>
-            <motion.button
-              onClick={prevImage}
-              className="absolute left-2 top-1/2 -translate-y-1/2 bg-white/90 dark:bg-gray-900/90 backdrop-blur-sm rounded-full p-2 shadow-lg z-10 hover:bg-white dark:hover:bg-gray-800"
-              aria-label="Previous image"
-              initial={{ opacity: 0, x: -10 }}
-              animate={{
-                opacity: isHovered ? 1 : 0,
-                x: isHovered ? 0 : -10
-              }}
-              whileHover={{ scale: 1.1 }}
-              whileTap={{ scale: 0.95 }}
-              transition={{ duration: 0.3, ease: "easeInOut" }}
-            >
-              <BsChevronLeft className="text-gray-900 dark:text-white text-xl" />
-            </motion.button>
-
-            <motion.button
-              onClick={nextImage}
-              className="absolute right-4 top-1/2 -translate-y-1/2 bg-white/90 dark:bg-gray-900/90 backdrop-blur-sm rounded-full p-2 shadow-lg z-10 hover:bg-white dark:hover:bg-gray-800"
-              aria-label="Next image"
-              initial={{ opacity: 0, x: 10 }}
-              animate={{
-                opacity: isHovered ? 1 : 0,
-                x: isHovered ? 0 : 10
-              }}
-              whileHover={{ scale: 1.1 }}
-              whileTap={{ scale: 0.95 }}
-              transition={{ duration: 0.3, ease: "easeInOut" }}
-            >
-              <BsChevronRight className="text-gray-900 dark:text-white text-xl" />
-            </motion.button>
-
-            <div className="absolute bottom-2 left-1/2 -translate-x-1/2 flex gap-1.5">
-              {displayImages.map((_, index) => (
-                <button
-                  key={index}
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    setCurrentImageIndex(index);
-                  }}
-                  className={`h-1.5 rounded-full transition-all duration-200 ${index === currentImageIndex
-                    ? 'w-6 bg-white dark:bg-white'
-                    : 'w-1.5 bg-white/50 dark:bg-white/50'
-                    } ${isHovered ? 'opacity-100' : 'opacity-0'}`}
-                  aria-label={`Go to image ${index + 1}`}
-                />
-              ))}
-            </div>
-          </>
-        )}
-      </div>
-    </section>
+    </div>
   );
 
   return (
     <motion.div
       ref={ref}
-      className="group mb-3 sm:mb-8 last:mb-0"
+      initial={{ opacity: 0, y: 40 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "-80px" }}
+      transition={{ duration: 0.5, ease: "easeOut" }}
+      className="w-full"
     >
       {isN8NWorkflows ? (
         <Link
           href="/n8n-workflows"
+          className="block w-full"
           onClick={() => {
             setActiveSection("Projects");
             setTimeOfLastClick(Date.now());
@@ -280,32 +276,26 @@ export default function Project({
         cardContent
       )}
 
-      {/* Lightbox */}
+      {/* ── Lightbox ── */}
       <AnimatePresence>
         {lightboxOpen && (
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[9999] bg-black/95 backdrop-blur-sm flex items-center justify-center p-4 sm:p-8"
-            onClick={(e) => {
-              e.stopPropagation();
-              e.preventDefault();
-              setLightboxOpen(false);
-            }}
+            className="fixed inset-0 z-[9999] bg-black/95 backdrop-blur-md flex items-center justify-center p-4 sm:p-8"
+            onClick={() => setLightboxOpen(false)}
           >
+            {/* Close */}
             <button
-              className="absolute top-4 right-4 p-2 text-white/70 hover:text-white transition-colors bg-white/10 rounded-full z-[10000]"
-              onClick={(e) => {
-                e.stopPropagation();
-                setLightboxOpen(false);
-              }}
+              className="absolute top-4 right-4 p-2.5 text-white/70 hover:text-white bg-white/10 hover:bg-white/20 rounded-full z-[10000] transition border border-white/10"
+              onClick={(e) => { e.stopPropagation(); setLightboxOpen(false); }}
             >
-              <IoMdClose size={24} />
+              <IoMdClose size={22} />
             </button>
 
             <div
-              className="relative w-full max-w-5xl max-h-[85vh] flex items-center justify-center p-2"
+              className="relative w-full max-w-6xl max-h-[90vh] flex items-center justify-center"
               onClick={(e) => e.stopPropagation()}
             >
               <motion.div
@@ -318,44 +308,36 @@ export default function Project({
                 <Image
                   src={displayImages[currentImageIndex]}
                   alt="Project screenshot"
-                  quality={95}
+                  quality={100}
                   priority
-                  className="w-full h-full max-h-[85vh] object-contain rounded-md shadow-2xl"
+                  className="max-h-[85vh] w-auto object-contain rounded-xl shadow-2xl ring-1 ring-white/10"
+                  style={{ maxWidth: "100%" }}
+                  width={1600}
+                  height={1000}
                 />
               </motion.div>
 
               {displayImages.length > 1 && (
                 <>
                   <button
-                    className="absolute left-2 sm:left-4 top-1/2 -translate-y-1/2 p-3 bg-black/50 text-white rounded-full hover:bg-black/70 transition backdrop-blur-md border border-white/10 z-[10000]"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      prevImage(e);
-                    }}
+                    className="absolute left-0 sm:-left-14 top-1/2 -translate-y-1/2 p-3 bg-black/50 text-white rounded-full hover:bg-black/70 transition backdrop-blur-md border border-white/10 z-[10000]"
+                    onClick={(e) => { e.stopPropagation(); prevImage(e); }}
                   >
                     <BsChevronLeft size={20} />
                   </button>
                   <button
-                    className="absolute right-2 sm:right-4 top-1/2 -translate-y-1/2 p-3 bg-black/50 text-white rounded-full hover:bg-black/70 transition backdrop-blur-md border border-white/10 z-[10000]"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      nextImage(e);
-                    }}
+                    className="absolute right-0 sm:-right-14 top-1/2 -translate-y-1/2 p-3 bg-black/50 text-white rounded-full hover:bg-black/70 transition backdrop-blur-md border border-white/10 z-[10000]"
+                    onClick={(e) => { e.stopPropagation(); nextImage(e); }}
                   >
                     <BsChevronRight size={20} />
                   </button>
 
-                  <div className="absolute -bottom-12 left-1/2 -translate-x-1/2 flex gap-2">
+                  <div className="absolute -bottom-10 left-1/2 -translate-x-1/2 flex gap-2">
                     {displayImages.map((_, idx) => (
                       <button
                         key={idx}
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          setCurrentImageIndex(idx);
-                        }}
-                        className={`h-2 rounded-full transition-all ${idx === currentImageIndex
-                          ? "w-6 bg-white"
-                          : "w-2 bg-white/40 hover:bg-white/60"
+                        onClick={(e) => { e.stopPropagation(); setCurrentImageIndex(idx); }}
+                        className={`h-2 rounded-full transition-all ${idx === currentImageIndex ? "w-6 bg-white" : "w-2 bg-white/40 hover:bg-white/60"
                           }`}
                       />
                     ))}
@@ -366,6 +348,6 @@ export default function Project({
           </motion.div>
         )}
       </AnimatePresence>
-    </motion.div >
+    </motion.div>
   );
 }
