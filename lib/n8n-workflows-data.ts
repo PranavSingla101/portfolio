@@ -7,7 +7,7 @@ import duckduckgoLogo from "@/public/Duckduckgologo.png";
 import voiceAgentImg from "@/public/Voice-Agent-Productivity Assistant.png";
 import vapiSSImg from "@/public/VAPI SS.png";
 import mcpSSImg from "@/public/MCP SS.png";
-import n8nWorkflowCover from "@/public/N8N workflow cover.png";
+import icebreakerGeneratorImg from "@/public/ICEBREAKER GENERATOR.png";
 
 export const n8nWorkflowsData = [
    {
@@ -48,8 +48,8 @@ export const n8nWorkflowsData = [
          { name: "Sheets", icon: "logos:google-sheets" },
          { name: "Gmail", icon: "logos:google-gmail" },
       ],
-      imageUrl: n8nWorkflowCover,
-      images: [n8nWorkflowCover],
+      imageUrl: icebreakerGeneratorImg,
+      images: [icebreakerGeneratorImg],
    },
    {
       title: "Voice Agent Assistant",
