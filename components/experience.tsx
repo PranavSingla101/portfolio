@@ -76,7 +76,7 @@ export default function Experience() {
 
                 {/* Bullet points */}
                 <ul className="space-y-2.5">
-                  {(Array.isArray(item.description) ? [...item.description] as string[] : [item.description as string]).map(
+                  {(Array.isArray(item.description) ? (item.description as unknown as string[]) : [item.description as unknown as string]).map(
                     (point, idx) => (
                       <li
                         key={idx}
