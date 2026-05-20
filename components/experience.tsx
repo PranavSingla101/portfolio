@@ -55,8 +55,8 @@ export default function Experience() {
               {/* Card */}
               <div className="rounded-2xl border border-slate-600/40 bg-gradient-to-b from-slate-900 to-slate-950 p-5 sm:p-6 shadow-[0_8px_30px_rgba(0,0,0,0.35)] hover:border-indigo-500/30 hover:shadow-[0_8px_35px_rgba(99,102,241,0.08)] transition-all duration-300">
                 {/* Header row */}
-                <div className="flex flex-wrap items-start justify-between gap-3 mb-4">
-                  <div className="flex-1 min-w-0">
+                <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-1.5 sm:gap-3 mb-4">
+                  <div className="min-w-0">
                     <h3 className="text-base sm:text-lg font-bold text-white leading-snug">
                       {item.title}
                     </h3>
@@ -66,7 +66,7 @@ export default function Experience() {
                       </p>
                     )}
                   </div>
-                  <span className="shrink-0 text-xs font-medium text-slate-400 bg-slate-800/70 border border-slate-700/50 px-3 py-1.5 rounded-full">
+                  <span className="self-start sm:shrink-0 text-xs font-medium text-slate-400 bg-slate-800/70 border border-slate-700/50 px-3 py-1.5 rounded-full whitespace-nowrap">
                     {item.date}
                   </span>
                 </div>
