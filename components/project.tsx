@@ -55,10 +55,10 @@ export default function Project({
   };
 
   const cardContent = (
-    <div className="group flex flex-col lg:flex-row gap-0 w-full rounded-3xl overflow-hidden border border-slate-600/40 bg-gradient-to-b from-slate-900 to-slate-950 shadow-[0_25px_50px_-12px_rgba(0,0,0,0.5),0_0_0_1px_rgba(255,255,255,0.04)_inset] transition-all duration-300 hover:shadow-[0_30px_60px_-15px_rgba(0,0,0,0.55),0_0_0_1px_rgba(255,255,255,0.06)_inset] hover:border-slate-500/50">
-      {/* ── Image Side (Left) — mobile: same aspect as N8N card, no thumbnail strip; desktop unchanged ── */}
+    <div className="group flex flex-col gap-0 w-full h-full rounded-3xl overflow-hidden border border-slate-600/40 bg-gradient-to-b from-slate-900 to-slate-950 shadow-[0_25px_50px_-12px_rgba(0,0,0,0.5),0_0_0_1px_rgba(255,255,255,0.04)_inset] transition-all duration-300 hover:shadow-[0_30px_60px_-15px_rgba(0,0,0,0.55),0_0_0_1px_rgba(255,255,255,0.06)_inset] hover:border-slate-500/50">
+      {/* ── Image ── */}
       <div
-        className="relative w-full lg:w-[58%] overflow-hidden cursor-zoom-in bg-slate-950 flex items-center justify-center min-h-0 aspect-[16/10] sm:aspect-[4/3] lg:aspect-auto lg:min-h-[32rem] p-2 sm:p-4 lg:p-4"
+        className="relative w-full overflow-hidden cursor-zoom-in bg-slate-950 flex items-center justify-center aspect-[16/9] p-3"
         onClick={() => setLightboxOpen(true)}
       >
         {/* Main image — contain so nothing gets cropped; mobile-optimized aspect + padding */}
@@ -69,7 +69,7 @@ export default function Project({
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.25, ease: "easeInOut" }}
-            className="absolute inset-2 sm:inset-4 z-[1] flex items-center justify-center rounded-xl ring-1 ring-slate-600/40 shadow-inner bg-slate-900/80 overflow-hidden"
+            className="absolute inset-3 z-[1] flex items-center justify-center rounded-xl ring-1 ring-slate-600/40 shadow-inner bg-slate-900/80 overflow-hidden"
           >
             <Image
               src={displayImages[currentImageIndex]}
@@ -114,54 +114,20 @@ export default function Project({
           </>
         )}
 
-        {/* Thumbnail strip — desktop only; not shown on mobile for N8N-like clean card */}
-        {displayImages.length > 1 && (
-          <div className="hidden lg:flex absolute bottom-2 left-2 right-2 gap-2 overflow-x-auto z-[4] pb-1">
-            {displayImages.map((img, index) => (
-              <div
-                key={index}
-                onClick={(e) => { e.stopPropagation(); setCurrentImageIndex(index); }}
-                className={`flex-shrink-0 rounded-md overflow-hidden border-2 cursor-pointer transition-all ${index === currentImageIndex
-                  ? "border-indigo-400/80 shadow-lg"
-                  : "border-slate-600/60 opacity-70 hover:opacity-100"
-                  }`}
-              >
-                <Image
-                  src={img}
-                  alt="Thumbnail"
-                  height={44}
-                  width={70}
-                  className="object-cover h-[44px] w-[70px]"
-                  quality={50}
-                />
-              </div>
-            ))}
-          </div>
-        )}
       </div>
 
-      {/* ── Content Side (Right) ── */}
-      <div className="w-full lg:w-[42%] p-7 lg:p-10 flex flex-col justify-center border-t lg:border-t-0 lg:border-l border-slate-600/40">
+      {/* ── Content ── */}
+      <div className="w-full p-6 sm:p-8 flex flex-col flex-1 border-t border-slate-600/40">
         {/* Title row */}
-        <div className="flex items-center gap-3 mb-5">
-          <h3 className="text-3xl lg:text-4xl font-bold text-white tracking-tight leading-tight">
+        <div className="flex items-center gap-3 mb-4">
+          <h3 className="text-2xl font-bold text-white tracking-tight leading-tight">
             {title}
           </h3>
-          {githubLink && (
-            <a
-              href={githubLink}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="sm:hidden ml-auto flex items-center justify-center w-9 h-9 rounded-full border border-slate-500/50 text-slate-300 hover:text-white hover:border-slate-400 active:scale-95 transition"
-            >
-              <AiFillGithub className="text-xl" />
-            </a>
-          )}
         </div>
 
         {/* "Made with" tech icons */}
-        <div className="flex flex-wrap items-center gap-x-2 gap-y-2 mb-6">
-          <span className="text-base font-semibold text-slate-300 uppercase tracking-wider">
+        <div className="flex flex-wrap items-center gap-x-2 gap-y-2 mb-5">
+          <span className="text-sm font-semibold text-slate-400 uppercase tracking-wider">
             Made with
           </span>
           <div className="flex flex-wrap gap-2.5 items-center">
@@ -191,16 +157,16 @@ export default function Project({
         </div>
 
         {/* Description */}
-        <p className="leading-relaxed text-slate-200 mb-6 text-base sm:text-lg">
+        <p className="leading-relaxed text-slate-300 mb-5 text-sm sm:text-base">
           {description}
         </p>
 
         {/* Feature bullets */}
         {features && features.length > 0 && (
-          <ul className="mb-6 space-y-3" role="list">
+          <ul className="mb-5 space-y-2" role="list">
             {features.map((feature, index) => (
-              <li key={index} className="flex items-start gap-3 text-base sm:text-[1.0625rem] text-slate-200 leading-relaxed">
-                <span className="mt-1.5 flex-shrink-0 w-2 h-2 rounded-full bg-indigo-300 ring-2 ring-indigo-300/40" aria-hidden />
+              <li key={index} className="flex items-start gap-2.5 text-sm sm:text-base text-slate-300 leading-relaxed">
+                <span className="mt-1.5 flex-shrink-0 w-1.5 h-1.5 rounded-full bg-indigo-300 ring-2 ring-indigo-300/40" aria-hidden />
                 {feature}
               </li>
             ))}
@@ -208,13 +174,13 @@ export default function Project({
         )}
 
         {/* Action buttons */}
-        <div className="flex flex-wrap gap-3 mt-auto">
+        <div className="flex flex-wrap gap-2.5 mt-auto pt-1">
           {urlLink && (
             <a
               href={urlLink}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center gap-1.5 bg-indigo-500 text-white py-2.5 px-5 rounded-xl text-base font-semibold hover:bg-indigo-400 transition active:scale-[0.98]"
+              className="flex items-center gap-1.5 bg-indigo-500 text-white py-2 px-4 rounded-xl text-sm font-semibold hover:bg-indigo-400 transition active:scale-[0.98]"
             >
               <BiLinkExternal /> Live
             </a>
@@ -225,7 +191,7 @@ export default function Project({
               href={demoLink}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center gap-1.5 bg-indigo-500 text-white py-2.5 px-5 rounded-xl text-base font-semibold hover:bg-indigo-400 transition active:scale-[0.98]"
+              className="flex items-center gap-1.5 bg-indigo-500 text-white py-2 px-4 rounded-xl text-sm font-semibold hover:bg-indigo-400 transition active:scale-[0.98]"
             >
               <AiFillYoutube /> Demo
             </a>
@@ -236,14 +202,14 @@ export default function Project({
               href={githubLink}
               target="_blank"
               rel="noopener noreferrer"
-              className="hidden sm:flex items-center gap-1.5 border border-slate-500/50 py-2.5 px-5 rounded-xl text-base font-semibold text-slate-200 hover:bg-slate-700/50 hover:border-slate-400 transition active:scale-[0.98]"
+              className="flex items-center gap-1.5 border border-slate-500/50 py-2 px-4 rounded-xl text-sm font-semibold text-slate-200 hover:bg-slate-700/50 hover:border-slate-400 transition active:scale-[0.98]"
             >
               <AiFillGithub /> GitHub
             </a>
           )}
 
           {isN8NWorkflows && (
-            <span className="flex items-center gap-1.5 bg-indigo-500 text-white py-2.5 px-5 rounded-xl text-base font-semibold hover:bg-indigo-400 transition cursor-pointer active:scale-[0.98]">
+            <span className="flex items-center gap-1.5 bg-indigo-500 text-white py-2 px-4 rounded-xl text-sm font-semibold hover:bg-indigo-400 transition cursor-pointer active:scale-[0.98]">
               View Workflows <BsArrowRight />
             </span>
           )}
@@ -259,12 +225,12 @@ export default function Project({
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-80px" }}
       transition={{ duration: 0.5, ease: "easeOut" }}
-      className="w-full"
+      className="w-full h-full"
     >
       {isN8NWorkflows ? (
         <Link
           href="/n8n-workflows"
-          className="block w-full"
+          className="block w-full h-full"
           onClick={() => {
             setActiveSection("Projects");
             setTimeOfLastClick(Date.now());

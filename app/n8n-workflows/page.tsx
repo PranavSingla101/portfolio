@@ -52,7 +52,7 @@ export default function N8NWorkflowsPage() {
                   </Link>
                </motion.div>
 
-               <div className="flex flex-col gap-20 sm:gap-24 lg:gap-28">
+               <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 xl:gap-10">
                   {n8nWorkflowsData.map((workflow, index) => (
                      <React.Fragment key={index}>
                         <Project {...workflow} />

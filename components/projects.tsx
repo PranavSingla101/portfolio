@@ -22,7 +22,7 @@ export default function Projects() {
         </h2>
         <div className="mx-auto mt-4 w-16 h-0.5 rounded-full bg-gradient-to-r from-transparent via-indigo-400/70 to-transparent" aria-hidden />
       </div>
-      <div className="flex flex-col gap-20 sm:gap-24 lg:gap-28">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 xl:gap-10">
         {projectsData.map((project, index) => (
           <React.Fragment key={index}>
             <Project {...project} />

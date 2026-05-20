@@ -10,6 +10,10 @@ import awarePic2 from "@/public/Aware pic2.png";
 import ragChatPDF from "@/public/chatwithyourpdfrag.jpg";
 import ragProcess from "@/public/RAG process.jpg";
 import n8nWorkflowCover from "@/public/N8N workflow cover.png";
+import booklyLandingImg from "@/public/Bookly_landing.png";
+import booklyLibraryImg from "@/public/Bookly_library.png";
+import sysdesLandingImg from "@/public/sysdes-landing-page-readme.png";
+import sysdesEditorImg from "@/public/sysdes-editor-project-readme.png";
 
 export const links = [
   {
@@ -78,6 +82,51 @@ export const experiencesData = [
 ] as const;
 
 export const projectsData = [
+  {
+    title: "SYSDES",
+    description: "Real-time collaborative system design tool where multiple users share a live canvas with synchronized cursors, presence avatars, and node/edge editing.",
+    features: [
+      "Collaborative Canvas: Real-time multi-user design sharing with synchronized cursors, presence avatars, and node/edge editing via Liveblocks and React Flow",
+      "AI Generator: Converts natural language prompts into structured diagrams using Gemini 3.0 Flash and Trigger.dev for background progress streaming",
+      "Spec Pipeline: Serializes canvas graphs into Markdown technical specifications persisted to Vercel Blob with per-project access control",
+      "Full-Stack System: Clerk authentication, Prisma collaborator invitations, canvas autosave with debounced writes, and starter template library",
+    ],
+    tags: ["Next.js", "TypeScript", "React Flow", "Liveblocks", "Trigger.dev", "Gemini API", "Prisma", "Clerk"],
+    icons: [
+      { name: "Next.js", icon: "logos:nextjs-icon" },
+      { name: "TypeScript", icon: "logos:typescript-icon" },
+      { name: "React Flow", icon: "material-symbols:account-tree" },
+      { name: "Liveblocks", icon: "material-symbols:groups" },
+      { name: "Trigger.dev", icon: "material-symbols:bolt" },
+      { name: "Gemini API", icon: "material-symbols:auto-awesome" },
+      { name: "Prisma", icon: "simple-icons:prisma" },
+      { name: "Clerk", icon: "simple-icons:clerk" },
+    ],
+    imageUrl: sysdesLandingImg,
+    images: [sysdesLandingImg, sysdesEditorImg],
+  },
+  {
+    title: "Bookly",
+    description: "Cloud-based personal e-library web app that lets users upload, manage, and read EPUB books from any device with progress synced cross-device via CFI string tracking.",
+    features: [
+      "Secure File Pipeline: Private Supabase Storage buckets proxied exclusively via authenticated Next.js API routes to hide raw storage URLs",
+      "Isolated Epub Reader: Foliate-js inside an iframe with closed shadow DOM communicating via postMessage to prevent style leaks",
+      "Progress Sync: Debounced reading progress sync with last-write-wins conflict resolution (409 on stale writes) via CFI tracking",
+      "State Management: Zustand + localStorage client-side read cache with Supabase PostgreSQL as sole source of truth",
+    ],
+    tags: ["Next.js", "TypeScript", "Supabase", "Clerk", "Zustand", "Tailwind CSS"],
+    icons: [
+      { name: "Next.js", icon: "logos:nextjs-icon" },
+      { name: "TypeScript", icon: "logos:typescript-icon" },
+      { name: "Supabase", icon: "logos:supabase-icon" },
+      { name: "Clerk", icon: "simple-icons:clerk" },
+      { name: "Foliate-js", icon: "material-symbols:menu-book" },
+      { name: "Zustand", icon: "material-symbols:database" },
+      { name: "Tailwind CSS", icon: "logos:tailwindcss-icon" },
+    ],
+    imageUrl: booklyLandingImg,
+    images: [booklyLandingImg, booklyLibraryImg],
+  },
   {
     title: "N8N Workflows",
     description: "Production-grade automation workflows built with n8n. Fully automated end-to-end pipelines.",
