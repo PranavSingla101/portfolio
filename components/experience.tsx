@@ -42,7 +42,7 @@ export default function Experience() {
                 {item.logo ? (
                   <Image
                     src={item.logo}
-                    alt={item.location || item.title}
+                    alt="company logo"
                     width={40}
                     height={40}
                     className="w-full h-full object-cover rounded-full"
