@@ -44,8 +44,8 @@ export const links = [
 
 export const experiencesData = [
   {
-    title: "AI Workflow Automation Developer",
-    location: "",
+    title: "AI Automation Developer",
+    location: "Freelance",
     description: [
       "Designed and deployed production-grade n8n automation workflows to fully automate lead sourcing, qualification, outreach, and CRM synchronization",
       "Developed LLM-driven lead qualification agents with API enrichment, prompt-based scoring, and conditional routing",
@@ -102,6 +102,7 @@ export const projectsData = [
       { name: "Prisma", icon: "simple-icons:prisma" },
       { name: "Clerk", icon: "simple-icons:clerk" },
     ],
+    liveDemo: "https://sysdes202.vercel.app",
     imageUrl: sysdesLandingImg,
     images: [sysdesLandingImg, sysdesEditorImg],
   },
@@ -226,6 +227,7 @@ export const skillsData = [
     skills: [
       { name: "LangChain", icon: "material-symbols:link" },
       { name: "Hugging Face Transformers", icon: "simple-icons:huggingface" },
+      { name: "Claude", icon: "simple-icons:anthropic" },
       { name: "OpenAI GPT-4o", icon: "material-symbols:auto-awesome" },
       { name: "Google Gemini API", icon: "material-symbols:auto-awesome" },
       { name: "RAG Systems", icon: "material-symbols:database" },
@@ -236,6 +238,7 @@ export const skillsData = [
     category: "Automation & Workflows",
     skills: [
       { name: "N8N Workflows", icon: "simple-icons:n8n" },
+      { name: "Clay", icon: "material-symbols:layers" },
       { name: "Make.com", icon: "simple-icons:make" },
       { name: "Python Scripting", icon: "logos:python" },
       { name: "API Integration", icon: "material-symbols:api" },
@@ -243,6 +246,7 @@ export const skillsData = [
       { name: "JSON Parsing", icon: "material-symbols:code" },
       { name: "Chatbot Integration", icon: "material-symbols:smart-toy" },
       { name: "MCP", icon: "material-symbols:link" },
+      { name: "Trigger.dev", icon: "material-symbols:bolt" },
       { name: "Data Pipelines", icon: "material-symbols:route" },
     ],
   },
@@ -250,6 +254,7 @@ export const skillsData = [
     category: "Libraries & Frameworks",
     skills: [
       { name: "Next.js", icon: "logos:nextjs-icon" },
+      { name: "Liveblocks", icon: "material-symbols:groups" },
       { name: "React.js", icon: "logos:react" },
       { name: "FastAPI", icon: "logos:fastapi" },
       { name: "TensorFlow", icon: "logos:tensorflow" },
@@ -262,6 +267,7 @@ export const skillsData = [
     category: "Databases & Tools",
     skills: [
       { name: "MongoDB", icon: "logos:mongodb-icon" },
+      { name: "Prisma", icon: "simple-icons:prisma" },
       { name: "Firebase", icon: "logos:firebase" },
       { name: "PostgreSQL", icon: "logos:postgresql" },
       { name: "MySQL", icon: "logos:mysql" },

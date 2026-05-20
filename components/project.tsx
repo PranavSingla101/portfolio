@@ -22,6 +22,7 @@ type ProjectProps = {
   githubLink?: string;
   demoLink?: string;
   urlLink?: string;
+  liveDemo?: string;
 };
 
 export default function Project({
@@ -35,6 +36,7 @@ export default function Project({
   githubLink,
   demoLink,
   urlLink,
+  liveDemo,
 }: ProjectProps) {
   const ref = useRef<HTMLDivElement>(null);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
@@ -175,6 +177,17 @@ export default function Project({
 
         {/* Action buttons */}
         <div className="flex flex-wrap gap-2.5 mt-auto pt-1">
+          {liveDemo && (
+            <a
+              href={liveDemo}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-1.5 bg-indigo-500 text-white py-2 px-4 rounded-xl text-sm font-semibold hover:bg-indigo-400 transition active:scale-[0.98]"
+            >
+              <BiLinkExternal /> Live Demo
+            </a>
+          )}
+
           {urlLink && (
             <a
               href={urlLink}
