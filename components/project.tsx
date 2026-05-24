@@ -14,6 +14,7 @@ import { useActiveSectionContext } from "@/context/active-section-context";
 type ProjectProps = {
   title: string;
   description: string;
+  badge?: string;
   features?: readonly string[];
   tags: readonly string[];
   icons: readonly (string | { name: string; icon: string | StaticImageData })[];
@@ -28,6 +29,7 @@ type ProjectProps = {
 export default function Project({
   title,
   description,
+  badge,
   features,
   tags,
   icons,
@@ -125,6 +127,11 @@ export default function Project({
           <h3 className="text-2xl font-bold text-white tracking-tight leading-tight">
             {title}
           </h3>
+          {badge && (
+            <span className="flex-shrink-0 rounded-full bg-indigo-500/20 border border-indigo-400/30 px-2.5 py-0.5 text-xs font-semibold text-indigo-300 uppercase tracking-wider">
+              {badge}
+            </span>
+          )}
         </div>
 
         {/* "Made with" tech icons */}

@@ -12,12 +12,11 @@ import icebreakerGeneratorImg from "@/public/ICEBREAKER GENERATOR.png";
 export const n8nWorkflowsData = [
    {
       title: "Cold Email Outreach Engine",
-      description: "This project automates intelligent email outreach by retrieving Lead data from HubSpot and using Gemini to generate hyper-personalized, industry-specific messages, before pushing campaigns to Smartlead for execution.",
+      description: "AI-powered outbound system for lead qualification, personalized outreach, and automated campaign execution.",
       features: [
-         "Lead Qualification: Automatically pulls high-intent leads from HubSpot",
-         "AI Personalization: Uses an LLM agent to write unique, contextual icebreakers for every prospect",
-         "Campaign Execution: Pushes leads directly into Smartlead and logs in Google Sheet",
-         "The Closer: When a lead replies? The system detects it, updates the CRM, and instantly alerts the sales team on Slack and Gmail",
+         "Automatically qualifies and enriches high-intent leads from Hubspot",
+         "AI agents generate personalized outreach via Smartlead and contextual icebreakers",
+         "CRM-integrated campaign execution with Slack and Gmail alerts",
       ],
       tags: ["Smartlead", "N8N", "Hubspot", "Gemini", "Slack"],
       icons: [
@@ -32,12 +31,11 @@ export const n8nWorkflowsData = [
    },
    {
       title: "AI Website Scraper & Icebreaker",
-      description: "Built an AI workflow that writes personalized icebreakers using real company data, not templates. It crawls key pages, extracts meaningful signals, and aggregates context to generate specific, relevant openers.",
+      description: "AI agent that researches company websites and generates personalized outreach icebreakers from real business signals.",
       features: [
-         "Company Research: Crawl key pages (home, about, product, blog) and extract meaningful signals",
-         "AI Summarization: Convert pages into usable insights (product, growth, hiring, messaging)",
-         "Context Aggregation: Combine everything into a clean company profile, focusing only on what’s relevant",
-         "Icebreaker Generation: Generate multi-line personalized openers based on actual insights",
+         "Crawls and analyzes company websites for key insights",
+         "Extracts product, hiring, and growth signals using AI",
+         "Generates personalized outreach openers from real company context",
       ],
       tags: ["n8n", "Apollo", "Firecrawl", "Gemini 2.5 Pro", "Sheets", "Gmail"],
       icons: [
@@ -53,11 +51,11 @@ export const n8nWorkflowsData = [
    },
    {
       title: "Voice Agent Assistant",
-      description: "A voice assistant that eliminates manual tasks. This workflow manages calendars, creates tasks, and retrieves information, responding instantly with minimal latency.",
+      description: "AI voice agent that manages tasks, calendars, and workflow automation through natural conversation.",
       features: [
-         "Real-time Voice AI: Leverages Vapi for natural, conversational interactions",
-         "Contextual Action: Intelligently parses intent to trigger n8n workflows via MCP depending on tasks",
-         "Personal Knowledge Base: Connects to Google Calendar to read/write data seamlessly",
+         "Real-time voice interactions with low-latency responses using VAPI",
+         "AI agents triggering automated workflows and task execution via MCP",
+         "Google Calendar integration for scheduling and information retrieval",
       ],
       tags: ["n8n", "Vapi", "OpenAI", "Google Calendar"],
       icons: [
@@ -70,13 +68,12 @@ export const n8nWorkflowsData = [
       images: [mcpSSImg, voiceAgentImg, vapiSSImg],
    },
    {
-      title: "X Content Engine",
-      description: "A fully automated content engine that sources, drafts, and schedules posts for X (Twitter). It combines industry news scraping with AI-driven research to maintain an active social presence on autopilot",
+      title: "X Content AI Agent",
+      description: "AI-powered content system that researches, drafts, and schedules posts for X automatically.",
       features: [
-         "The Trigger & Input: System automatically pulls context from manual inputs and scrapes relevant industry news via RSS feeds",
-         "AI Agent: Powered by Gemini and DuckDuckGo to research unique hooks and draft high-conversion posts",
-         "Storage: Drafted content is formatted and automatically saved to Google Sheets for review",
-         "Distribution: Daily automated retrieval and posting of approved content to X",
+         "System automatically pulls context from manual inputs and scrapes relevant industry news via RSS feeds and DuckDuckgo",
+         "AI agents generating platform-specific content and hooks",
+         "Scheduled content with logs on Google Sheets",
       ],
       tags: ["n8n", "Gemini", "Google Sheets", "X (Twitter)", "RSS"],
       icons: [
@@ -91,12 +88,12 @@ export const n8nWorkflowsData = [
       images: [automatedContentEngineImg],
    },
    {
-      title: "LinkedIn Outreach",
-      description: "Designed and deployed an end-to-end automated prospecting workflow that integrates HubSpot CRM with AI-powered content generation to streamline LinkedIn outreach. The system manages the entire lifecycle: from identifying new leads and sending personalized invites to syncing acceptance data back to the CRM, significantly reducing manual effort while increasing engagement rates.",
+      title: "LinkedIn Outreach Agent",
+      description: "AI-powered LinkedIn prospecting system built for automated lead generation and personalized outreach.",
       features: [
-         "AI-Driven Pipeline: Uses Gemini 2.5 pro API to generate hyper-personalized connection messages based on HubSpot data in real-time",
-         "Multi-Platform Orchestration: Connects HubSpot, Phantombuster, Google Sheets, and Slack to automate lead extraction and campaign execution",
-         "Sync: Automatically tracks connection acceptance rates, updates lead statuses, and notifies sales teams via Slack",
+         "AI agents generating personalized connection messages from CRM data (Hubspot)",
+         "Automated lead extraction and campaign orchestration across multiple platforms (Gemini, HubSpot, Phantombuster, Google Sheets, and Slack)",
+         "Real-time CRM sync with engagement tracking and Slack notifications",
       ],
       tags: ["n8n", "HubSpot", "Phantombuster", "Gemini", "Slack", "Google Sheets"],
       icons: [

@@ -14,6 +14,7 @@ import booklyLandingImg from "@/public/Bookly_landing.png";
 import booklyLibraryImg from "@/public/Bookly_library.png";
 import sysdesLandingImg from "@/public/sysdes-landing-page-readme.png";
 import sysdesEditorImg from "@/public/sysdes-editor-project-readme.png";
+import claudeCoworkOutreachImg from "@/public/Claude_cowork_outreach.png";
 
 export const links = [
   {
@@ -84,12 +85,11 @@ export const experiencesData = [
 export const projectsData = [
   {
     title: "SYSDES",
-    description: "Real-time collaborative system design tool where multiple users share a live canvas with synchronized cursors, presence avatars, and node/edge editing.",
+    description: "AI-powered collaborative system design canvas.",
     features: [
-      "Collaborative Canvas: Real-time multi-user design sharing with synchronized cursors, presence avatars, and node/edge editing via Liveblocks and React Flow",
-      "AI Generator: Converts natural language prompts into structured diagrams using Gemini 3.0 Flash and Trigger.dev for background progress streaming",
-      "Spec Pipeline: Serializes canvas graphs into Markdown technical specifications persisted to Vercel Blob with per-project access control",
-      "Full-Stack System: Clerk authentication, Prisma collaborator invitations, canvas autosave with debounced writes, and starter template library",
+      "Real-time multiplayer editing via Liveblocks + React Flow",
+      "Generate diagrams from natural language → structured graph, with non-blocking background streaming via Trigger.dev",
+      "Export architecture specs instantly",
     ],
     tags: ["Next.js", "TypeScript", "React Flow", "Liveblocks", "Trigger.dev", "Gemini API", "Prisma", "Clerk"],
     icons: [
@@ -108,12 +108,11 @@ export const projectsData = [
   },
   {
     title: "Bookly",
-    description: "Cloud-based personal e-library web app that lets users upload, manage, and read EPUB books from any device with progress synced cross-device via CFI string tracking.",
+    description: "Personal cloud EPUB library with synced reading progress across devices.",
     features: [
-      "Secure File Pipeline: Private Supabase Storage buckets proxied exclusively via authenticated Next.js API routes to hide raw storage URLs",
-      "Isolated Epub Reader: Foliate-js inside an iframe with closed shadow DOM communicating via postMessage to prevent style leaks",
-      "Progress Sync: Debounced reading progress sync with last-write-wins conflict resolution (409 on stale writes) via CFI tracking",
-      "State Management: Zustand + localStorage client-side read cache with Supabase PostgreSQL as sole source of truth",
+      "Upload and read EPUB books anywhere",
+      "Real-time reading progress sync",
+      "Sandboxed reader preventing UI/style conflicts, using Foliate-js",
     ],
     tags: ["Next.js", "TypeScript", "Supabase", "Clerk", "Zustand", "Tailwind CSS"],
     icons: [
@@ -130,11 +129,11 @@ export const projectsData = [
   },
   {
     title: "N8N Workflows",
-    description: "Production-grade automation workflows built with n8n. Fully automated end-to-end pipelines.",
+    description: "Production automation systems and AI agents built for real client operations and outreach pipelines.",
     features: [
-      "Advanced LLM integration for conversational voice bots and autonomous content engines",
-      "Cross-platform scraping and data enrichment pipelines (LinkedIn, X, Apollo)",
-      "Production-ready state management connecting CRM webhooks with real-time outreach",
+      "AI agents for voice, content, and workflow automation",
+      "Multi-platform lead scraping and enrichment pipelines",
+      "CRM-integrated outreach systems with real-time webhook orchestration",
     ],
     tags: ["n8n", "Automation", "LLM", "API Integration", "Webhooks", "CRM"],
     icons: [
@@ -148,12 +147,30 @@ export const projectsData = [
     images: [n8nWorkflowCover],
   },
   {
-    title: "RAG PDF Assistant",
-    description: "Intelligent document Q&A system using Retrieval-Augmented Generation to enable natural language queries over PDF documents with semantic search and context-aware responses.",
+    title: "Claude B2B Outreach Pipeline",
+    description: "Autonomous AI outreach system for lead enrichment, personalization, and cold email automation.",
     features: [
-      "LangChain-powered RAG pipeline with ChromaDB vector store for semantic document retrieval",
-      "Google Gemini API integration (gemini-2.5-flash-lite) with text-embedding-004 for embeddings",
-      "Streamlit web interface with real-time PDF processing and interactive Q&A capabilities",
+      "Processes and enriches 50+ leads daily",
+      "Sends 300+ personalized outreach emails monthly",
+      "Custom Claude AI agents orchestrating the entire pipeline autonomously",
+    ],
+    tags: ["Claude Cowork", "Apollo", "Clay", "Lemlist"],
+    icons: [
+      { name: "Claude Cowork", icon: "simple-icons:anthropic" },
+      { name: "Apollo", icon: "material-symbols:rocket-launch" },
+      { name: "Clay", icon: "material-symbols:layers" },
+      { name: "Lemlist", icon: "material-symbols:mail" },
+    ],
+    imageUrl: claudeCoworkOutreachImg,
+    images: [claudeCoworkOutreachImg],
+  },
+  {
+    title: "RAG PDF Assistant",
+    description: "AI-powered document assistant enabling natural language conversations with PDF files using semantic search and retrieval using LangChain.",
+    features: [
+      "Semantic PDF search with context-aware responses with ChromaDB",
+      "Retrieval pipeline powered by vector embeddings (Gemini)",
+      "Real-time document processing and interactive Q&A",
     ],
     tags: ["Python", "Streamlit", "LangChain", "Google Gemini", "ChromaDB"],
     icons: [
@@ -173,7 +190,7 @@ export const projectsData = [
     features: [
       "Random Forest model achieving 82% accuracy in disease risk prediction",
       "Built real-time sensor using synthetic dataset",
-      "Google Gemini AI integration for personalized health recommendations",
+      "Gemini AI integration for personalized health recommendations",
     ],
     tags: ["React", "FastAPI", "Firebase", "Google Gemini AI", "scikit-learn"],
     icons: [
@@ -189,11 +206,11 @@ export const projectsData = [
   },
   {
     title: "AI Logo Generator",
-    description: "Full-stack AI-powered platform that generates custom logos using Google Gemini for prompt generation and multiple AI models (Hugging Face, Replicate) for logo creation.",
+    description: "AI-powered platform for generating custom logos from natural language prompts using HuggingFace Image model (Flux).",
     features: [
-      "AI-powered prompt generation using Google Gemini for optimized logo creation",
-      "Multi-model logo generation with free (Hugging Face) and premium (Replicate) tiers",
-      "User dashboard with credit system, authentication, and logo management via Firebase",
+      "AI-generated logo prompts optimized for brand styles",
+      "Multi-model logo generation with Hugging Face and Replicate",
+      "User dashboard with authentication, credits, and logo management using Firebase",
     ],
     tags: ["Next.js", "React", "Firebase", "Google Gemini AI", "Hugging Face", "Clerk"],
     icons: [
