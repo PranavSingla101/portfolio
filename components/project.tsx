@@ -134,30 +134,29 @@ export default function Project({
           )}
         </div>
 
-        {/* "Made with" tech icons */}
-        <div className="flex flex-wrap items-center gap-x-2 gap-y-2 mb-5">
-          <span className="text-sm font-semibold text-slate-400 uppercase tracking-wider">
+        {/* "Stack" tech icons — always single line, scales down to fit */}
+        <div className="flex items-center gap-x-2 mb-5 min-w-0 overflow-hidden">
+          <span className="shrink-0 text-xs sm:text-sm font-semibold text-slate-400 uppercase tracking-wider">
             STACK →
           </span>
-          <div className="flex flex-wrap gap-2.5 items-center">
+          <div className="flex items-center gap-x-1.5 sm:gap-x-2 min-w-0 overflow-hidden">
             {icons.map((tech, iconIndex) => {
               const techName = typeof tech === "string" ? "" : tech.name;
               const iconData = typeof tech === "string" ? tech : tech.icon;
 
               if (typeof iconData === "object" && "src" in iconData) {
                 return (
-                  <div key={iconIndex} className="relative w-8 h-8 flex-shrink-0" title={techName}>
+                  <div key={iconIndex} className="relative w-5 h-5 sm:w-6 sm:h-6 shrink-0" title={techName}>
                     <Image src={iconData} alt={techName} fill className="object-contain" />
                   </div>
                 );
               }
 
-              const isFastAPI = techName === "FastAPI";
               return (
-                <div key={iconIndex} title={techName} className="flex-shrink-0">
+                <div key={iconIndex} title={techName} className="shrink-0">
                   <Icon
                     icon={iconData as string}
-                    className={`${isFastAPI ? "text-[1.25rem]" : "text-[1.5rem]"} text-slate-300`}
+                    className="text-[1.1rem] sm:text-[1.3rem] text-slate-300"
                   />
                 </div>
               );
