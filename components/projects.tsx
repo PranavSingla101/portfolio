@@ -58,17 +58,12 @@ export default function Projects() {
         <div className="flex justify-center mt-12">
           <button
             onClick={() => setShowAll((prev) => !prev)}
-            className="flex items-center gap-2 px-6 py-3 rounded-xl border border-slate-600/50 bg-slate-900/60 text-slate-300 text-sm font-semibold hover:bg-slate-800/80 hover:border-slate-500 hover:text-white transition-all duration-200 active:scale-[0.98]"
+            className="group flex items-center gap-2 px-8 py-3 rounded-full text-sm font-semibold text-white bg-indigo-500 hover:bg-indigo-400 transition-all duration-200 active:scale-[0.97] hover:scale-[1.03]"
           >
-            {showAll ? (
-              <>
-                Show Less <BsChevronUp className="text-base" />
-              </>
-            ) : (
-              <>
-                Show more <BsChevronDown className="text-base" />
-              </>
-            )}
+            <span>{showAll ? "Show Less" : "Show More"}</span>
+            <span className="transition-transform duration-200 group-hover:translate-y-[2px]">
+              {showAll ? <BsChevronUp className="text-sm" /> : <BsChevronDown className="text-sm" />}
+            </span>
           </button>
         </div>
       )}

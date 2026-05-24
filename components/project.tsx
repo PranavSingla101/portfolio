@@ -137,7 +137,7 @@ export default function Project({
         {/* "Made with" tech icons */}
         <div className="flex flex-wrap items-center gap-x-2 gap-y-2 mb-5">
           <span className="text-sm font-semibold text-slate-400 uppercase tracking-wider">
-            Made with
+            STACK →
           </span>
           <div className="flex flex-wrap gap-2.5 items-center">
             {icons.map((tech, iconIndex) => {

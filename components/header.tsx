@@ -13,7 +13,7 @@ export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
 
   return (
-    <header className="z-[999] relative">
+    <header>
       {/* ── Desktop pill nav (sm+) ── */}
       <motion.div
         className="hidden sm:flex fixed top-6 left-0 right-0 justify-center pointer-events-none z-[999]"
