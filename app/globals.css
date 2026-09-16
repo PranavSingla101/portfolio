@@ -2,18 +2,239 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+  --bg: #07070d;
+  --line-color: rgba(255, 255, 255, 0.08);
+  --violet: 139 92 246;
+  --fuchsia: 232 121 249;
+  --cyan: 34 211 238;
+}
+
 html {
-  --line-color: #e5e7eb;
+  color-scheme: dark;
+  background: var(--bg);
 }
 
-html.dark {
-  --line-color: rgba(255, 255, 255, 0.2);
+body {
+  background: var(--bg);
+  color: #e7e7f0;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  overflow-x: hidden;
 }
 
-.borderBlack {
-  @apply border border-black/10;
+::selection {
+  background: rgba(var(--fuchsia) / 0.35);
+  color: #fff;
 }
 
+/* ── Scrollbar ─────────────────────────────────────────── */
+::-webkit-scrollbar {
+  width: 10px;
+}
+::-webkit-scrollbar-track {
+  background: var(--bg);
+}
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #3b2f6b, #1a1a28);
+  border-radius: 999px;
+  border: 2px solid var(--bg);
+}
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, #8b5cf6, #22d3ee);
+}
+
+/* ── Film grain overlay ────────────────────────────────── */
+.grain::before {
+  content: "";
+  position: fixed;
+  inset: -50%;
+  width: 200%;
+  height: 200%;
+  pointer-events: none;
+  z-index: 60;
+  opacity: 0.035;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  animation: grainShift 0.6s steps(2) infinite;
+}
+@keyframes grainShift {
+  0% { transform: translate(0, 0); }
+  25% { transform: translate(-2%, 1%); }
+  50% { transform: translate(1%, -2%); }
+  75% { transform: translate(-1%, -1%); }
+  100% { transform: translate(2%, 2%); }
+}
+
+/* ── Text utilities ────────────────────────────────────── */
+.text-aurora {
+  background: linear-gradient(120deg, #c4b5fd 0%, #e879f9 45%, #67e8f9 100%);
+  background-size: 200% 200%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: gradientShift 8s ease infinite;
+}
+
+.text-shine {
+  background: linear-gradient(
+    110deg,
+    #ffffff 0%,
+    #ffffff 40%,
+    #c4b5fd 50%,
+    #ffffff 60%,
+    #ffffff 100%
+  );
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: shimmer 6s linear infinite;
+}
+
+/* ── Glass surface + gradient border ───────────────────── */
+.glass {
+  position: relative;
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.05) 0%,
+    rgba(255, 255, 255, 0.02) 100%
+  );
+  backdrop-filter: blur(18px) saturate(140%);
+  -webkit-backdrop-filter: blur(18px) saturate(140%);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow:
+    0 1px 0 0 rgba(255, 255, 255, 0.05) inset,
+    0 30px 80px -30px rgba(0, 0, 0, 0.8);
+}
+
+/* Gradient border: uses a mask so only the 1px ring shows the gradient. */
+.gradient-border {
+  position: relative;
+  isolation: isolate;
+}
+.gradient-border::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1px;
+  background: linear-gradient(
+    135deg,
+    rgba(var(--violet) / 0.5),
+    rgba(var(--fuchsia) / 0.15) 40%,
+    rgba(255, 255, 255, 0.04) 60%,
+    rgba(var(--cyan) / 0.4)
+  );
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+  z-index: 1;
+  opacity: 0.7;
+  transition: opacity 0.4s ease;
+}
+.gradient-border:hover::before {
+  opacity: 1;
+}
+
+/* Mouse-tracked spotlight (set --mx / --my from JS). */
+.spotlight {
+  --mx: 50%;
+  --my: 50%;
+  --spot-color: rgba(var(--violet) / 0.18);
+}
+.spotlight::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0;
+  transition: opacity 0.5s ease;
+  background: radial-gradient(
+    600px circle at var(--mx) var(--my),
+    var(--spot-color),
+    transparent 40%
+  );
+}
+.spotlight:hover::after {
+  opacity: 1;
+}
+
+/* ── Backdrop layers ───────────────────────────────────── */
+.dot-grid {
+  background-image: radial-gradient(
+    rgba(255, 255, 255, 0.09) 1px,
+    transparent 1px
+  );
+  background-size: 28px 28px;
+  -webkit-mask-image: radial-gradient(
+    ellipse 70% 60% at 50% 0%,
+    #000 30%,
+    transparent 100%
+  );
+  mask-image: radial-gradient(
+    ellipse 70% 60% at 50% 0%,
+    #000 30%,
+    transparent 100%
+  );
+}
+
+.aurora-blob {
+  position: absolute;
+  border-radius: 9999px;
+  filter: blur(90px);
+  opacity: 0.75;
+  will-change: transform;
+  mix-blend-mode: screen;
+}
+
+/* ── Marquee ───────────────────────────────────────────── */
+.marquee-mask {
+  -webkit-mask-image: linear-gradient(
+    90deg,
+    transparent,
+    #000 12%,
+    #000 88%,
+    transparent
+  );
+  mask-image: linear-gradient(
+    90deg,
+    transparent,
+    #000 12%,
+    #000 88%,
+    transparent
+  );
+}
+
+/* ── Conic ring around the avatar ──────────────────────── */
+.conic-ring {
+  background: conic-gradient(
+    from var(--angle, 0deg),
+    #8b5cf6,
+    #e879f9,
+    #22d3ee,
+    #8b5cf6
+  );
+}
+@property --angle {
+  syntax: "<angle>";
+  initial-value: 0deg;
+  inherits: false;
+}
+@keyframes rotateAngle {
+  to {
+    --angle: 360deg;
+  }
+}
+.conic-ring {
+  animation: rotateAngle 6s linear infinite;
+}
+
+/* ── Misc ──────────────────────────────────────────────── */
 .vertical-timeline {
   padding: 0 !important;
 }
@@ -24,11 +245,20 @@ html.dark {
 }
 
 #tsparticles {
-  z-index: -1;
+  z-index: 0;
   position: absolute !important;
-  top: 0 !important;
-  left: 0 !important;
-  bottom: 0 !important;
+  inset: 0 !important;
   width: 100% !important;
   height: 100% !important;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }
