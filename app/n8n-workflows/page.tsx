@@ -14,24 +14,9 @@ export default function N8NWorkflowsPage() {
   return (
     <main className="relative flex flex-col items-center overflow-x-clip">
       {/* ── Hero ── */}
-      <section className="particles-section relative w-full px-6 pt-24 pb-16 text-center sm:pt-32 sm:pb-24">
+      <section className="particles-section relative w-full px-6 pt-32 pb-16 text-center sm:pt-40 sm:pb-24">
         <ParticleContainer />
 
-        {/* Back link — top-left of the hero, above the title */}
-        <motion.div
-          initial={{ opacity: 0, x: -12 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.5, ease: EASE }}
-          className="relative z-10 mx-auto mb-10 flex w-full max-w-[90rem] justify-start sm:mb-14"
-        >
-          <Link
-            href="/#projects"
-            className="group inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.04] px-4 py-2 text-sm font-medium text-white/70 backdrop-blur-sm transition-all duration-300 hover:border-white/25 hover:bg-white/[0.08] hover:text-white"
-          >
-            <BsArrowLeft className="transition-transform duration-300 group-hover:-translate-x-1" />
-            Back to projects
-          </Link>
-        </motion.div>
         <div
           aria-hidden
           className="pointer-events-none absolute left-1/2 top-[20%] h-[20rem] w-[50rem] max-w-[120vw] -translate-x-1/2 rounded-full bg-[radial-gradient(ellipse_at_center,rgba(139,92,246,0.22),rgba(34,211,238,0.06)_45%,transparent_70%)] blur-2xl"
@@ -57,6 +42,22 @@ export default function N8NWorkflowsPage() {
           N8N{" "}
           <span className="font-serif italic font-normal text-aurora">Workflows</span>
         </motion.h1>
+
+        {/* Back link — centred beneath the title */}
+        <motion.div
+          initial={{ opacity: 0, y: 12 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.25, ease: EASE }}
+          className="relative z-10 mt-8 flex justify-center"
+        >
+          <Link
+            href="/#projects"
+            className="group inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.04] px-5 py-2.5 text-sm font-medium text-white/70 backdrop-blur-sm transition-all duration-300 hover:border-white/25 hover:bg-white/[0.08] hover:text-white"
+          >
+            <BsArrowLeft className="transition-transform duration-300 group-hover:-translate-x-1" />
+            Back to projects
+          </Link>
+        </motion.div>
 
         {/* Fade the particle field out so there's no hard seam below the hero */}
         <div
