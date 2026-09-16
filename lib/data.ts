@@ -275,7 +275,7 @@ export const skillsData = [
       { name: "React.js", icon: "logos:react" },
       { name: "FastAPI", icon: "logos:fastapi" },
       { name: "TensorFlow", icon: "logos:tensorflow" },
-      { name: "Scikit-Learn", icon: "logos:scikit-learn" },
+      { name: "Scikit-Learn", icon: "devicon:scikitlearn" },
       { name: "Pandas", icon: "logos:pandas" },
       { name: "NumPy", icon: "logos:numpy" },
     ],
