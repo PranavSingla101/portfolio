@@ -53,7 +53,7 @@ export const experiencesData = [
       "Automated multi-step cold email sequences with state-aware logic, processing 100+ leads/week with zero human intervention",
     ],
     icon: React.createElement(CgWorkAlt),
-    date: "December 2025 - January 2026",
+    date: "December 2025 - July 2026",
     logo: freelancerLogo,
   },
   {
@@ -147,7 +147,7 @@ export const projectsData = [
     images: [n8nWorkflowCover],
   },
   {
-    title: "Claude B2B Outreach Pipeline",
+    title: "Claude B2B Outreach Agent",
     description: "Autonomous AI outreach system for lead enrichment, personalization, and cold email automation.",
     features: [
       "Processes and enriches 50+ leads daily",

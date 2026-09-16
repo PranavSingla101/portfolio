@@ -61,7 +61,7 @@ export default function Education() {
               <div className="my-4 h-px w-full bg-gradient-to-r from-white/10 via-white/5 to-transparent" />
 
               <p className="font-mono text-xs uppercase tracking-[0.2em] text-white/45">
-                August 2023 – September 2027
+                August 2023 – May 2027
               </p>
             </div>
           </div>
