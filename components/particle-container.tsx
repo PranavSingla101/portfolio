@@ -2,7 +2,7 @@
 
 import React, { useCallback } from "react";
 import Particles from "react-particles";
-import type { Container, Engine } from "tsparticles-engine";
+import type { Engine } from "tsparticles-engine";
 import { loadSlim } from "tsparticles-slim";
 
 const ParticleContainer: React.FC = () => {
@@ -10,122 +10,49 @@ const ParticleContainer: React.FC = () => {
     await loadSlim(engine);
   }, []);
 
-  const particlesLoaded = useCallback(
-    async (container: Container | undefined) => {
-      await console.log("Particles.js loaded");
-    },
-    []
-  );
-
   return (
     <Particles
       id="tsparticles"
       init={particlesInit}
-      loaded={particlesLoaded}
       options={{
-        background: {
-          color: {
-            value: "#111827",
-          },
-        },
-        fpsLimit: 120,
+        background: { color: { value: "transparent" } },
+        fpsLimit: 60,
+        fullScreen: { enable: false },
+        detectRetina: true,
         interactivity: {
           events: {
-            onClick: {
-              enable: false,
-              mode: "push",
-            },
-            onHover: {
-              enable: true,
-              mode: "grab",
-            },
+            onHover: { enable: true, mode: "grab" },
             resize: true,
           },
           modes: {
-            grab: {
-              distance: 150,
-              line_linked: {
-                opacity: 1,
-              },
-            },
-            push: {
-              particles_nb: 4,
-            },
-            remove: {
-              particles_nd: 2,
-            },
-            repulse: {
-              distance: 200,
-              duration: 0.4,
-            },
+            grab: { distance: 160, links: { opacity: 0.35 } },
           },
         },
-        fullScreen: { enable: false },
         particles: {
-          color: {
-            value: "#ffffff",
-          },
+          color: { value: ["#c4b5fd", "#e879f9", "#67e8f9"] },
           links: {
-            color: "#ffffff",
-            distance: 150,
+            color: "#a78bfa",
+            distance: 140,
             enable: true,
-            opacity: 0.2,
+            opacity: 0.12,
             width: 1,
           },
           move: {
-            direction: "none",
             enable: true,
-            outModes: {
-              default: "bounce",
-            },
-            random: false,
-            speed: 2,
-            straight: false,
-            attract: {
-              enable: false,
-              rotateX: 600,
-              rotateY: 1200,
-            },
-          },
-          number: {
-            density: {
-              enable: true,
-              area: 800,
-            },
-            value: 80,
-          },
-          opacity: {
-            value: 0.3,
-            random: false,
-            anim: {
-              enable: false,
-              speed: 1,
-              opacity_min: 0.1,
-              sync: false,
-            },
-          },
-          shape: {
-            type: "circle",
-            stroke: {
-              width: 0,
-              color: "#000000",
-            },
-            polygon: {
-              nb_sides: 5,
-            },
-          },
-          size: {
-            value: 2,
+            direction: "none",
+            outModes: { default: "out" },
             random: true,
-            anim: {
-              enable: false,
-              speed: 40,
-              size_min: 0.1,
-              sync: false,
-            },
+            speed: 0.6,
+            straight: false,
           },
+          number: { density: { enable: true, area: 900 }, value: 55 },
+          opacity: {
+            value: { min: 0.15, max: 0.6 },
+            animation: { enable: true, speed: 0.6, sync: false },
+          },
+          shape: { type: "circle" },
+          size: { value: { min: 0.8, max: 2.2 } },
         },
-        detectRetina: true,
       }}
     />
   );
