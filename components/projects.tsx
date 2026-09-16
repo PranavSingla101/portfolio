@@ -14,55 +14,52 @@ export default function Projects() {
   const { ref } = useSectionInView("Projects", 0.28);
   const [showAll, setShowAll] = useState(false);
 
-  const visibleProjects = showAll ? projectsData : projectsData.slice(0, INITIAL_COUNT);
   const hiddenCount = projectsData.length - INITIAL_COUNT;
 
   return (
     <section
       id="projects"
       ref={ref}
-      className="mb-28 max-w-[90rem] mx-auto scroll-mt-28 px-6"
+      className="relative mx-auto mb-32 sm:mb-40 w-full max-w-[90rem] scroll-mt-28 px-6"
     >
-      <div className="text-center mb-12 sm:mb-14">
-        <h2 className="text-3xl sm:text-4xl font-bold tracking-tight text-white">
-          My Projects
-        </h2>
-        <div className="mx-auto mt-4 w-16 h-0.5 rounded-full bg-gradient-to-r from-transparent via-indigo-400/70 to-transparent" aria-hidden />
-      </div>
+      <SectionHeading eyebrow="01 — Work" accent="Projects">
+        Selected
+      </SectionHeading>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 xl:gap-10">
+      <div className="grid grid-cols-1 gap-6 lg:grid-cols-2 xl:gap-8">
         {projectsData.slice(0, INITIAL_COUNT).map((project, index) => (
-          <React.Fragment key={index}>
-            <Project {...project} />
-          </React.Fragment>
+          <Project key={project.title} {...project} index={index} />
         ))}
 
         <AnimatePresence>
           {showAll &&
             projectsData.slice(INITIAL_COUNT).map((project, index) => (
               <motion.div
-                key={INITIAL_COUNT + index}
+                key={project.title}
                 initial={{ opacity: 0, y: 40 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: 40 }}
-                transition={{ duration: 0.4, ease: "easeOut", delay: index * 0.1 }}
-                className="w-full h-full"
+                transition={{ duration: 0.45, ease: "easeOut", delay: index * 0.08 }}
+                className="h-full w-full"
               >
-                <Project {...project} />
+                <Project {...project} index={INITIAL_COUNT + index} />
               </motion.div>
             ))}
         </AnimatePresence>
       </div>
 
       {hiddenCount > 0 && (
-        <div className="flex justify-center mt-12">
+        <div className="mt-14 flex justify-center">
           <button
-            onClick={() => setShowAll((prev) => !prev)}
-            className="group flex items-center gap-2 px-8 py-3 rounded-full text-sm font-semibold text-white bg-indigo-500 hover:bg-indigo-400 transition-all duration-200 active:scale-[0.97] hover:scale-[1.03]"
+            onClick={() => setShowAll((p) => !p)}
+            className="group relative inline-flex items-center gap-3 overflow-hidden rounded-full border border-white/10 bg-white/[0.03] px-7 py-3.5 text-sm font-semibold text-white/85 backdrop-blur-sm transition-all duration-300 hover:border-white/25 hover:text-white active:scale-[0.97]"
           >
-            <span>{showAll ? "Show Less" : "Show More"}</span>
-            <span className="transition-transform duration-200 group-hover:translate-y-[2px]">
-              {showAll ? <BsChevronUp className="text-sm" /> : <BsChevronDown className="text-sm" />}
+            <span className="absolute inset-0 -z-10 bg-gradient-to-r from-aurora-violet/0 via-aurora-violet/15 to-aurora-cyan/0 opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
+            <span>
+              {showAll ? "Show less" : `Show ${hiddenCount} more project${hiddenCount > 1 ? "s" : ""}`}
+            </span>
+            <span className="grid h-6 w-6 place-items-center rounded-full bg-white/[0.06] transition-transform duration-300 group-hover:translate-y-0.5">
+              {showAll ? <BsChevronUp className="text-xs" /> : <BsChevronDown className="text-xs" />}
             </span>
           </button>
         </div>

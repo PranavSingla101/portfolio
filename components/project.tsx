@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Image, { StaticImageData } from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import { BiLinkExternal } from "react-icons/bi";
@@ -10,6 +10,7 @@ import { IoMdClose } from "react-icons/io";
 import { Icon } from "@iconify/react";
 import Link from "next/link";
 import { useActiveSectionContext } from "@/context/active-section-context";
+import Card from "./card";
 
 type ProjectProps = {
   title: string;
@@ -24,7 +25,27 @@ type ProjectProps = {
   demoLink?: string;
   urlLink?: string;
   liveDemo?: string;
+  /** Zero-based position in the grid, rendered as "01", "02", … */
+  index?: number;
 };
+
+const primaryBtn =
+  "group/btn relative inline-flex items-center gap-2 overflow-hidden rounded-full py-2 text-sm font-semibold text-white transition-transform active:scale-[0.97] px-5";
+const ghostBtn =
+  "inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.03] px-5 py-2 text-sm font-semibold text-white/80 transition-all hover:border-white/25 hover:bg-white/[0.08] hover:text-white active:scale-[0.97]";
+
+function PrimaryButton({
+  children,
+  ...rest
+}: React.AnchorHTMLAttributes<HTMLAnchorElement> & { children: React.ReactNode }) {
+  return (
+    <a className={primaryBtn} {...rest}>
+      <span className="absolute inset-0 bg-gradient-to-r from-aurora-violet via-aurora-fuchsia to-aurora-cyan bg-[length:200%_100%] animate-gradient-shift" />
+      <span className="absolute inset-[1.5px] rounded-full bg-ink-800 transition-opacity duration-300 group-hover/btn:opacity-0" />
+      <span className="relative flex items-center gap-2">{children}</span>
+    </a>
+  );
+}
 
 export default function Project({
   title,
@@ -39,6 +60,7 @@ export default function Project({
   demoLink,
   urlLink,
   liveDemo,
+  index,
 }: ProjectProps) {
   const ref = useRef<HTMLDivElement>(null);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
@@ -48,32 +70,79 @@ export default function Project({
   const displayImages = images && images.length > 0 ? images : [imageUrl];
   const isN8NWorkflows = title === "N8N Workflows";
 
-  const nextImage = (e: React.MouseEvent) => {
-    e.stopPropagation();
+  const nextImage = (e?: React.SyntheticEvent) => {
+    e?.stopPropagation();
     setCurrentImageIndex((prev) => (prev + 1) % displayImages.length);
   };
 
-  const prevImage = (e: React.MouseEvent) => {
-    e.stopPropagation();
+  const prevImage = (e?: React.SyntheticEvent) => {
+    e?.stopPropagation();
     setCurrentImageIndex((prev) => (prev - 1 + displayImages.length) % displayImages.length);
   };
 
+  // Escape to close, arrow keys to navigate, and lock background scroll
+  // while the lightbox is open.
+  useEffect(() => {
+    if (!lightboxOpen) return;
+
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setLightboxOpen(false);
+      if (e.key === "ArrowRight") nextImage();
+      if (e.key === "ArrowLeft") prevImage();
+    };
+
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    window.addEventListener("keydown", onKeyDown);
+
+    return () => {
+      window.removeEventListener("keydown", onKeyDown);
+      document.body.style.overflow = previousOverflow;
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [lightboxOpen, displayImages.length]);
+
+  // Swipe support — the dot indicators imply swipeability on touch devices.
+  const touchStartX = useRef<number | null>(null);
+
+  const onTouchStart = (e: React.TouchEvent) => {
+    touchStartX.current = e.touches[0].clientX;
+  };
+
+  const onTouchEnd = (e: React.TouchEvent) => {
+    if (touchStartX.current === null || displayImages.length < 2) return;
+    const delta = e.changedTouches[0].clientX - touchStartX.current;
+    if (Math.abs(delta) > 50) {
+      delta < 0 ? nextImage() : prevImage();
+    }
+    touchStartX.current = null;
+  };
+
   const cardContent = (
-    <div className="group flex flex-col gap-0 w-full h-full rounded-3xl overflow-hidden border border-slate-600/40 bg-gradient-to-b from-slate-900 to-slate-950 shadow-[0_25px_50px_-12px_rgba(0,0,0,0.5),0_0_0_1px_rgba(255,255,255,0.04)_inset] transition-all duration-300 hover:shadow-[0_30px_60px_-15px_rgba(0,0,0,0.55),0_0_0_1px_rgba(255,255,255,0.06)_inset] hover:border-slate-500/50">
+    <Card
+      radius="3xl"
+      elevation="high"
+      hover="lift"
+      className="group h-full w-full"
+    >
       {/* ── Image ── */}
       <div
-        className="relative w-full overflow-hidden cursor-zoom-in bg-slate-950 flex items-center justify-center aspect-[16/9] p-3"
+        className="relative w-full overflow-hidden cursor-zoom-in aspect-[16/10] bg-ink-950"
         onClick={() => setLightboxOpen(true)}
+        onTouchStart={onTouchStart}
+        onTouchEnd={onTouchEnd}
       >
-        {/* Main image — contain so nothing gets cropped; mobile-optimized aspect + padding */}
+        {/* Tinted backdrop so letterboxed screenshots don't sit on flat black */}
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(139,92,246,0.18),transparent_60%)]" />
+
         <AnimatePresence mode="wait">
           <motion.div
             key={currentImageIndex}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
+            initial={{ opacity: 0, scale: 1.02 }}
+            animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0 }}
-            transition={{ duration: 0.25, ease: "easeInOut" }}
-            className="absolute inset-3 z-[1] flex items-center justify-center rounded-xl ring-1 ring-slate-600/40 shadow-inner bg-slate-900/80 overflow-hidden"
+            transition={{ duration: 0.35, ease: "easeOut" }}
+            className="absolute inset-4 z-[1] overflow-hidden rounded-xl ring-1 ring-white/10 bg-ink-900/70 shadow-2xl transition-transform duration-700 ease-out group-hover:scale-[1.025]"
           >
             <Image
               src={displayImages[currentImageIndex]}
@@ -86,180 +155,176 @@ export default function Project({
           </motion.div>
         </AnimatePresence>
 
-        {/* Navigation arrows — desktop only on mobile show in lightbox */}
+        {/* Bottom fade into the card body */}
+        <div className="pointer-events-none absolute inset-x-0 bottom-0 z-[2] h-16 bg-gradient-to-t from-ink-900/80 to-transparent" />
+
+        {/* Index tag */}
+        {typeof index === "number" && (
+          <span className="absolute left-5 top-5 z-[3] font-mono text-[0.65rem] tracking-[0.25em] text-white/60 rounded-full border border-white/10 bg-ink-900/60 backdrop-blur-md px-2.5 py-1">
+            {String(index + 1).padStart(2, "0")}
+          </span>
+        )}
+
+        {/* Navigation arrows */}
         {displayImages.length > 1 && (
           <>
             <button
               onClick={prevImage}
-              className="absolute left-3 top-1/2 -translate-y-1/2 bg-black/40 backdrop-blur-sm text-white rounded-full p-2.5 z-[4] opacity-0 group-hover:opacity-100 hover:bg-black/60 transition-all duration-200 border border-white/10 hidden lg:flex"
+              aria-label="Previous screenshot"
+              className="absolute left-4 top-1/2 -translate-y-1/2 z-[4] grid h-9 w-9 place-items-center rounded-full border border-white/10 bg-ink-900/60 text-white backdrop-blur-md transition-all duration-300 hover:bg-ink-900/90 lg:opacity-0 lg:group-hover:opacity-100 lg:-translate-x-2 lg:group-hover:translate-x-0"
             >
-              <BsChevronLeft className="text-base" />
+              <BsChevronLeft className="text-sm" />
             </button>
             <button
               onClick={nextImage}
-              className="absolute right-3 top-1/2 -translate-y-1/2 bg-black/40 backdrop-blur-sm text-white rounded-full p-2.5 z-[4] opacity-0 group-hover:opacity-100 hover:bg-black/60 transition-all duration-200 border border-white/10 hidden lg:flex"
+              aria-label="Next screenshot"
+              className="absolute right-4 top-1/2 -translate-y-1/2 z-[4] grid h-9 w-9 place-items-center rounded-full border border-white/10 bg-ink-900/60 text-white backdrop-blur-md transition-all duration-300 hover:bg-ink-900/90 lg:opacity-0 lg:group-hover:opacity-100 lg:translate-x-2 lg:group-hover:translate-x-0"
             >
-              <BsChevronRight className="text-base" />
+              <BsChevronRight className="text-sm" />
             </button>
 
-            {/* Dot indicators — show on all breakpoints so mobile users see there are more images / can swipe in lightbox */}
-            <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-1.5 z-[4]">
+            <div className="absolute bottom-5 left-1/2 -translate-x-1/2 z-[4] flex gap-1.5 rounded-full border border-white/10 bg-ink-900/60 px-2 py-1.5 backdrop-blur-md">
               {displayImages.map((_, idx) => (
                 <button
                   key={idx}
-                  onClick={(e) => { e.stopPropagation(); setCurrentImageIndex(idx); }}
-                  className={`rounded-full transition-all duration-300 ${idx === currentImageIndex
-                    ? "w-5 h-2 bg-white shadow-md"
-                    : "w-2 h-2 bg-white/50 hover:bg-white/80"
-                    }`}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setCurrentImageIndex(idx);
+                  }}
+                  aria-label={`Go to screenshot ${idx + 1}`}
+                  aria-current={idx === currentImageIndex}
+                  className={`h-1.5 rounded-full transition-all duration-300 ${
+                    idx === currentImageIndex
+                      ? "w-5 bg-gradient-to-r from-aurora-violet to-aurora-cyan"
+                      : "w-1.5 bg-white/40 hover:bg-white/70"
+                  }`}
                 />
               ))}
             </div>
           </>
         )}
-
       </div>
 
       {/* ── Content ── */}
-      <div className="w-full p-6 sm:p-8 flex flex-col flex-1 border-t border-slate-600/40">
-        {/* Title row */}
-        <div className="flex items-center gap-3 mb-4">
-          <h3 className="text-2xl font-bold text-white tracking-tight leading-tight">
+      <div className="flex flex-1 flex-col p-6 sm:p-8">
+        <div className="mb-4 flex flex-wrap items-center gap-3">
+          <h3 className="font-display text-2xl sm:text-[1.7rem] font-bold tracking-tight text-white leading-tight">
             {title}
           </h3>
           {badge && (
-            <span className="flex-shrink-0 rounded-full bg-indigo-500/20 border border-indigo-400/30 px-2.5 py-0.5 text-xs font-semibold text-indigo-300 uppercase tracking-wider">
+            <span className="rounded-full border border-aurora-fuchsia/30 bg-aurora-fuchsia/10 px-2.5 py-0.5 font-mono text-[0.6rem] uppercase tracking-[0.2em] text-aurora-fuchsia">
               {badge}
             </span>
           )}
         </div>
 
-        {/* "Stack" tech icons — always single line, scales down to fit */}
-        <div className="flex items-center gap-x-2 mb-5 min-w-0 overflow-hidden">
-          <span className="shrink-0 text-xs sm:text-sm font-semibold text-slate-400 uppercase tracking-wider">
-            STACK →
+        {/* Stack */}
+        <div className="mb-5 flex flex-wrap items-center gap-x-3 gap-y-2">
+          <span className="flex items-center gap-3 shrink-0">
+            <span className="font-mono text-[0.62rem] uppercase tracking-[0.25em] text-white/40">
+              Stack
+            </span>
+            <span className="h-px w-4 bg-white/15" aria-hidden />
           </span>
-          <div className="flex items-center gap-x-1.5 sm:gap-x-2 min-w-0 overflow-hidden">
+          <div className="flex flex-wrap items-center gap-1.5">
             {icons.map((tech, iconIndex) => {
               const techName = typeof tech === "string" ? "" : tech.name;
               const iconData = typeof tech === "string" ? tech : tech.icon;
 
-              if (typeof iconData === "object" && "src" in iconData) {
-                return (
-                  <div key={iconIndex} className="relative w-5 h-5 sm:w-6 sm:h-6 shrink-0" title={techName}>
-                    <Image src={iconData} alt={techName} fill className="object-contain" />
-                  </div>
-                );
-              }
-
               return (
-                <div key={iconIndex} title={techName} className="shrink-0">
-                  <Icon
-                    icon={iconData as string}
-                    className="text-[1.1rem] sm:text-[1.3rem] text-slate-300"
-                  />
+                <div
+                  key={iconIndex}
+                  title={techName}
+                  className="group/icon relative flex h-8 min-w-[2rem] shrink-0 items-center justify-center rounded-lg px-2 border border-white/[0.07] bg-white/[0.03] transition-all duration-300 hover:border-aurora-violet/40 hover:bg-aurora-violet/10 hover:-translate-y-0.5"
+                >
+                  {typeof iconData === "object" && "src" in iconData ? (
+                    <div className="relative h-4 w-4">
+                      <Image src={iconData} alt={techName} fill className="object-contain" />
+                    </div>
+                  ) : (
+                    <Icon icon={iconData as string} height={18} className="text-white/80" />
+                  )}
                 </div>
               );
             })}
           </div>
         </div>
 
-        {/* Description */}
-        <p className="leading-relaxed text-slate-300 mb-5 text-sm sm:text-base">
+        <p className="mb-5 text-sm sm:text-[0.95rem] leading-relaxed text-white/60">
           {description}
         </p>
 
-        {/* Feature bullets */}
         {features && features.length > 0 && (
-          <ul className="mb-5 space-y-2" role="list">
-            {features.map((feature, index) => (
-              <li key={index} className="flex items-start gap-2.5 text-sm sm:text-base text-slate-300 leading-relaxed">
-                <span className="mt-1.5 flex-shrink-0 w-1.5 h-1.5 rounded-full bg-indigo-300 ring-2 ring-indigo-300/40" aria-hidden />
+          <ul className="mb-6 space-y-2.5" role="list">
+            {features.map((feature, i) => (
+              <li
+                key={i}
+                className="flex items-start gap-3 text-sm sm:text-[0.95rem] leading-relaxed text-white/75"
+              >
+                <span
+                  className="mt-[0.55rem] h-1.5 w-1.5 shrink-0 rounded-full bg-gradient-to-br from-aurora-violet to-aurora-cyan shadow-[0_0_10px_rgba(139,92,246,0.7)]"
+                  aria-hidden
+                />
                 {feature}
               </li>
             ))}
           </ul>
         )}
 
-        {/* Action buttons */}
-        <div className="flex flex-wrap gap-2.5 mt-auto pt-1">
+        {/* Actions */}
+        <div className="mt-auto flex flex-wrap gap-2.5 pt-2">
           {liveDemo && (
-            <a
-              href={liveDemo}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center gap-1.5 bg-indigo-500 text-white py-2 px-4 rounded-xl text-sm font-semibold hover:bg-indigo-400 transition active:scale-[0.98]"
-            >
+            <PrimaryButton href={liveDemo} target="_blank" rel="noopener noreferrer">
               <BiLinkExternal /> Live Demo
-            </a>
+            </PrimaryButton>
           )}
-
           {urlLink && (
-            <a
-              href={urlLink}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center gap-1.5 bg-indigo-500 text-white py-2 px-4 rounded-xl text-sm font-semibold hover:bg-indigo-400 transition active:scale-[0.98]"
-            >
+            <PrimaryButton href={urlLink} target="_blank" rel="noopener noreferrer">
               <BiLinkExternal /> Live
-            </a>
+            </PrimaryButton>
           )}
-
           {demoLink && (
-            <a
-              href={demoLink}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center gap-1.5 bg-indigo-500 text-white py-2 px-4 rounded-xl text-sm font-semibold hover:bg-indigo-400 transition active:scale-[0.98]"
-            >
+            <PrimaryButton href={demoLink} target="_blank" rel="noopener noreferrer">
               <AiFillYoutube /> Demo
-            </a>
+            </PrimaryButton>
           )}
-
           {githubLink && (
-            <a
-              href={githubLink}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center gap-1.5 border border-slate-500/50 py-2 px-4 rounded-xl text-sm font-semibold text-slate-200 hover:bg-slate-700/50 hover:border-slate-400 transition active:scale-[0.98]"
-            >
+            <a href={githubLink} target="_blank" rel="noopener noreferrer" className={ghostBtn}>
               <AiFillGithub /> GitHub
             </a>
           )}
-
           {isN8NWorkflows && (
-            <span className="flex items-center gap-1.5 bg-indigo-500 text-white py-2 px-4 rounded-xl text-sm font-semibold hover:bg-indigo-400 transition cursor-pointer active:scale-[0.98]">
-              View Workflows <BsArrowRight />
-            </span>
+            <Link
+              href="/n8n-workflows"
+              onClick={() => {
+                setActiveSection("Projects");
+                setTimeOfLastClick(Date.now());
+              }}
+              className={primaryBtn}
+            >
+              <span className="absolute inset-0 bg-gradient-to-r from-aurora-violet via-aurora-fuchsia to-aurora-cyan bg-[length:200%_100%] animate-gradient-shift" />
+              <span className="absolute inset-[1.5px] rounded-full bg-ink-800 transition-opacity duration-300 group-hover/btn:opacity-0" />
+              <span className="relative flex items-center gap-2">
+                View Workflows
+                <BsArrowRight className="transition-transform duration-300 group-hover/btn:translate-x-1" />
+              </span>
+            </Link>
           )}
         </div>
       </div>
-    </div>
+    </Card>
   );
 
   return (
     <motion.div
       ref={ref}
-      initial={{ opacity: 0, y: 40 }}
+      initial={{ opacity: 0, y: 48 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-80px" }}
-      transition={{ duration: 0.5, ease: "easeOut" }}
-      className="w-full h-full"
+      transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+      className="h-full w-full"
     >
-      {isN8NWorkflows ? (
-        <Link
-          href="/n8n-workflows"
-          className="block w-full h-full"
-          onClick={() => {
-            setActiveSection("Projects");
-            setTimeOfLastClick(Date.now());
-          }}
-        >
-          {cardContent}
-        </Link>
-      ) : (
-        cardContent
-      )}
+      {cardContent}
 
       {/* ── Lightbox ── */}
       <AnimatePresence>
@@ -268,34 +333,52 @@ export default function Project({
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[9999] bg-black/95 backdrop-blur-md flex items-center justify-center p-4 sm:p-8"
+            className="fixed inset-0 z-[9999] flex items-center justify-center bg-ink-950/95 p-4 backdrop-blur-xl sm:p-8"
             onClick={() => setLightboxOpen(false)}
+            onTouchStart={onTouchStart}
+            onTouchEnd={onTouchEnd}
+            role="dialog"
+            aria-modal="true"
+            aria-label={`${title} screenshots`}
           >
-            {/* Close */}
             <button
-              className="absolute top-4 right-4 p-2.5 text-white/70 hover:text-white bg-white/10 hover:bg-white/20 rounded-full z-[10000] transition border border-white/10"
-              onClick={(e) => { e.stopPropagation(); setLightboxOpen(false); }}
+              className="absolute right-4 top-4 z-[10000] grid h-11 w-11 place-items-center rounded-full border border-white/10 bg-white/[0.06] text-white/80 transition hover:bg-white/15 hover:text-white"
+              aria-label="Close image viewer"
+              autoFocus
+              onClick={(e) => {
+                e.stopPropagation();
+                setLightboxOpen(false);
+              }}
             >
               <IoMdClose size={22} />
             </button>
 
+            <div className="absolute left-6 top-6 hidden sm:block font-mono text-xs uppercase tracking-[0.3em] text-white/40">
+              {title}
+              {displayImages.length > 1 && (
+                <span className="ml-3 text-white/25">
+                  {currentImageIndex + 1} / {displayImages.length}
+                </span>
+              )}
+            </div>
+
             <div
-              className="relative w-full max-w-6xl max-h-[90vh] flex items-center justify-center"
+              className="relative flex max-h-[90vh] w-full max-w-6xl items-center justify-center"
               onClick={(e) => e.stopPropagation()}
             >
               <motion.div
                 key={currentImageIndex}
-                initial={{ opacity: 0, scale: 0.95 }}
+                initial={{ opacity: 0, scale: 0.96 }}
                 animate={{ opacity: 1, scale: 1 }}
-                transition={{ type: "spring", damping: 25, stiffness: 300 }}
-                className="relative w-full h-full flex items-center justify-center"
+                transition={{ type: "spring", damping: 26, stiffness: 300 }}
+                className="relative flex h-full w-full items-center justify-center"
               >
                 <Image
                   src={displayImages[currentImageIndex]}
                   alt="Project screenshot"
                   quality={100}
                   priority
-                  className="max-h-[85vh] w-auto object-contain rounded-xl shadow-2xl ring-1 ring-white/10"
+                  className="max-h-[85vh] w-auto rounded-2xl object-contain shadow-glow-lg ring-1 ring-white/10"
                   style={{ maxWidth: "100%" }}
                   width={1600}
                   height={1000}
@@ -305,25 +388,41 @@ export default function Project({
               {displayImages.length > 1 && (
                 <>
                   <button
-                    className="absolute left-0 sm:-left-14 top-1/2 -translate-y-1/2 p-3 bg-black/50 text-white rounded-full hover:bg-black/70 transition backdrop-blur-md border border-white/10 z-[10000]"
-                    onClick={(e) => { e.stopPropagation(); prevImage(e); }}
+                    className="absolute left-0 top-1/2 z-[10000] grid h-12 w-12 -translate-y-1/2 place-items-center rounded-full border border-white/10 bg-ink-900/70 text-white backdrop-blur-md transition hover:bg-ink-800 sm:-left-16"
+                    aria-label="Previous screenshot"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      prevImage(e);
+                    }}
                   >
                     <BsChevronLeft size={20} />
                   </button>
                   <button
-                    className="absolute right-0 sm:-right-14 top-1/2 -translate-y-1/2 p-3 bg-black/50 text-white rounded-full hover:bg-black/70 transition backdrop-blur-md border border-white/10 z-[10000]"
-                    onClick={(e) => { e.stopPropagation(); nextImage(e); }}
+                    className="absolute right-0 top-1/2 z-[10000] grid h-12 w-12 -translate-y-1/2 place-items-center rounded-full border border-white/10 bg-ink-900/70 text-white backdrop-blur-md transition hover:bg-ink-800 sm:-right-16"
+                    aria-label="Next screenshot"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      nextImage(e);
+                    }}
                   >
                     <BsChevronRight size={20} />
                   </button>
 
-                  <div className="absolute -bottom-10 left-1/2 -translate-x-1/2 flex gap-2">
+                  <div className="absolute -bottom-10 left-1/2 flex -translate-x-1/2 gap-2">
                     {displayImages.map((_, idx) => (
                       <button
                         key={idx}
-                        onClick={(e) => { e.stopPropagation(); setCurrentImageIndex(idx); }}
-                        className={`h-2 rounded-full transition-all ${idx === currentImageIndex ? "w-6 bg-white" : "w-2 bg-white/40 hover:bg-white/60"
-                          }`}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setCurrentImageIndex(idx);
+                        }}
+                        aria-label={`Go to screenshot ${idx + 1}`}
+                        aria-current={idx === currentImageIndex}
+                        className={`h-1.5 rounded-full transition-all ${
+                          idx === currentImageIndex
+                            ? "w-7 bg-gradient-to-r from-aurora-violet to-aurora-cyan"
+                            : "w-1.5 bg-white/30 hover:bg-white/60"
+                        }`}
                       />
                     ))}
                   </div>

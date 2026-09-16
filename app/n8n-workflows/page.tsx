@@ -8,59 +8,64 @@ import Link from "next/link";
 import { BsArrowLeft } from "react-icons/bs";
 import { motion } from "framer-motion";
 
+const EASE = [0.22, 1, 0.36, 1] as const;
+
 export default function N8NWorkflowsPage() {
-   return (
-      <main className="flex flex-col items-center">
-         {/* ── Hero / Header — matches Intro section style ── */}
-         <section className="particles-section w-full text-center pt-28 pb-14 sm:pt-36 sm:pb-16 px-4 relative">
-            <ParticleContainer />
+  return (
+    <main className="relative flex flex-col items-center overflow-x-clip">
+      {/* ── Hero ── */}
+      <section className="particles-section relative w-full px-6 pt-32 pb-12 text-center sm:pt-40 sm:pb-16">
+        <ParticleContainer />
+        <div
+          aria-hidden
+          className="pointer-events-none absolute left-1/2 top-[20%] h-[20rem] w-[50rem] max-w-[120vw] -translate-x-1/2 rounded-full bg-[radial-gradient(ellipse_at_center,rgba(139,92,246,0.22),rgba(34,211,238,0.06)_45%,transparent_70%)] blur-2xl"
+        />
 
-            {/* Page title */}
-            <motion.h1
-               initial={{ opacity: 0, y: 30 }}
-               animate={{ opacity: 1, y: 0 }}
-               transition={{ duration: 0.5, delay: 0.1 }}
-               className="text-3xl sm:text-4xl font-bold text-white tracking-tight"
-            >
-               N8N Workflows
-            </motion.h1>
-            <motion.p
-               initial={{ opacity: 0, y: 20 }}
-               animate={{ opacity: 1, y: 0 }}
-               transition={{ duration: 0.5, delay: 0.2 }}
-               className="mt-3 text-white/50 text-base max-w-xl mx-auto"
-            >
-            </motion.p>
-         </section>
+        <motion.span
+          initial={{ opacity: 0, y: 16 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, ease: EASE }}
+          className="relative z-10 inline-flex items-center gap-2 font-mono text-[0.7rem] uppercase tracking-[0.25em] text-white/50"
+        >
+          <span className="h-px w-6 bg-gradient-to-r from-transparent to-aurora-violet" />
+          Automation
+          <span className="h-px w-6 bg-gradient-to-l from-transparent to-aurora-cyan" />
+        </motion.span>
 
-         {/* ── Workflow cards — same container as main page projects ── */}
-         <div className="flex flex-col items-center px-4 w-full">
-            <section className="mb-28 max-w-[90rem] w-full mx-auto scroll-mt-28 px-2 sm:px-6">
-               {/* Back button — styled like primary CTA, positioned just above first project */}
-               <motion.div
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.35 }}
-                  className="mb-8 flex justify-start"
-               >
-                  <Link
-                     href="/#projects"
-                     className="inline-flex items-center gap-2 bg-indigo-500 text-white py-2.5 px-5 rounded-xl text-sm sm:text-base font-semibold hover:bg-indigo-400 transition active:scale-[0.98] shadow-[0_10px_25px_rgba(15,23,42,0.7)]"
-                  >
-                     <BsArrowLeft className="text-base" />
-                     Go Back
-                  </Link>
-               </motion.div>
+        <motion.h1
+          initial={{ opacity: 0, y: 24, filter: "blur(8px)" }}
+          animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+          transition={{ duration: 0.7, delay: 0.08, ease: EASE }}
+          className="relative z-10 mt-5 font-display text-5xl font-extrabold tracking-[-0.04em] text-white sm:text-6xl md:text-7xl"
+        >
+          N8N{" "}
+          <span className="font-serif italic font-normal text-aurora">Workflows</span>
+        </motion.h1>
+      </section>
 
-               <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 xl:gap-10">
-                  {n8nWorkflowsData.map((workflow, index) => (
-                     <React.Fragment key={index}>
-                        <Project {...workflow} />
-                     </React.Fragment>
-                  ))}
-               </div>
-            </section>
-         </div>
-      </main>
-   );
+      {/* ── Cards ── */}
+      <section className="mx-auto mb-32 w-full max-w-[90rem] px-6">
+        <motion.div
+          initial={{ opacity: 0, y: 12 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.4, delay: 0.2 }}
+          className="mb-8"
+        >
+          <Link
+            href="/#projects"
+            className="group inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.04] px-5 py-2.5 text-sm font-semibold text-white/80 backdrop-blur-sm transition-all duration-300 hover:border-white/25 hover:bg-white/[0.08] hover:text-white"
+          >
+            <BsArrowLeft className="transition-transform duration-300 group-hover:-translate-x-1" />
+            Back to projects
+          </Link>
+        </motion.div>
+
+        <div className="grid grid-cols-1 gap-6 lg:grid-cols-2 xl:gap-8">
+          {n8nWorkflowsData.map((workflow, index) => (
+            <Project key={workflow.title} {...workflow} index={index} />
+          ))}
+        </div>
+      </section>
+    </main>
+  );
 }
